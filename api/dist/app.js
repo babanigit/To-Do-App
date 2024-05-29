@@ -55,10 +55,10 @@ const dirname = path_1.default.dirname(path_1.default.resolve());
 // console.log(newPath);
 // routes
 // use the frontend app
-app.use(express_1.default.static(path_1.default.join(dirname, "/client/dist")));
+app.use(express_1.default.static(path_1.default.join(dirname, "/app/dist")));
 console.log(dirname);
 app.get('*', (req, res) => {
-    res.sendFile(path_1.default.join(dirname, '/client/dist/index.html'));
+    res.sendFile(path_1.default.join(dirname, '/app/dist/index.html'));
 });
 // get
 app.get("/", (req, res) => {

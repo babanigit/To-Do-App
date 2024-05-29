@@ -40,10 +40,10 @@ const dirname = path.dirname(path.resolve());
 
 
 // use the frontend app
-app.use(express.static(path.join(dirname, "/client/dist")));
+app.use(express.static(path.join(dirname, "/app/dist")));
 console.log(dirname)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(dirname, '/client/dist/index.html'));
+    res.sendFile(path.join(dirname, '/app/dist/index.html'));
 });
 
 // get

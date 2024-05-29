@@ -25,7 +25,7 @@ const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("💚[database connected]:", connect.connection.host, connect.connection.name);
     }
     catch (error) {
-        console.error("Failed to connect to the database");
+        console.error("💢Failed to connect to the database");
         console.error(error);
     }
 });
