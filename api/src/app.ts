@@ -63,16 +63,17 @@ app.use((res, req, next) => {
 // error handler middleware
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 
+    console.error("👺[error log]:", error);
+
     let errorMessage = "an unknown error occurred";
     let statusCode = 500;
     let success = false;
-
-    console.error("👺[error log]:", error);
 
     if (isHttpError(error)) {
         statusCode = error.status;
         errorMessage = error.message;
     }
+
     res.status(statusCode).json({
         success,
         message: errorMessage,
