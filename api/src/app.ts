@@ -56,7 +56,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // end point middleware
 app.use((res, req, next) => {
-    next(createHttpError(404, "endpoint not found"))
+    next(createHttpError(404, "endpoint not found"));
 });
 
 // error handler middleware

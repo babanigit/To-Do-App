@@ -138,16 +138,18 @@ export const getLogin = async (
   }
 };
 
-export const getLogout: RequestHandler = (req, res, next) => {
-  // will destroy the session here....
-  req.session.destroy((error: any) => {
-    if (error) {
-      next(error);
-    } else {
-      res
-        .clearCookie("access_token")
-        .status(200)
-        .json({ message: "User Logged out successfully" });
-    }
-  });
+export const getLogout: RequestHandler = (
+  req,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.clearCookie("access_token").status(200).json({
+      success: true,
+      message: "User Logged out successfully",
+      statusCode: 200,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
