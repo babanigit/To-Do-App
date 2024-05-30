@@ -1,4 +1,4 @@
-import  { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken"
 interface ITodo {
   todoState?: boolean;
   text?: string;
-  userId?:string;
+  // userId?:string;
 }
 
 import { JwtPayload } from "jsonwebtoken";
@@ -24,8 +24,10 @@ export const getTodos = async (req: Request, res: Response, next: NextFunction) 
     // assertIsDefine("cookie", decoded.id);
     assertIsDefine("cookie", getCookieAuth);
 
+    if (!process.env.SECRET) throw createHttpError(404, " undefined secret key ");
+
     // Type assertion to JwtPayload (haven't used yet)
-    const decoded = jwt.verify(getCookieAuth, process.env.SECRET_WORD!) as JwtPayload;
+    const decoded = jwt.verify(getCookieAuth, process.env.SECRET) as JwtPayload;
 
     const notes = await TodoModel.find({ userId: decoded.id }).exec();
     res.status(200).json(notes);
@@ -43,8 +45,10 @@ export const getTodo = async (req: Request, res: Response, next: NextFunction) =
 
     assertIsDefine("cookie", getCookieAuth);
 
+    if (!process.env.SECRET) throw createHttpError(404, " undefined secret key ");
+
     // Type assertion to JwtPayload (haven't used yet)
-    const decoded = jwt.verify(getCookieAuth, process.env.SECRET_WORD!) as JwtPayload;
+    const decoded = jwt.verify(getCookieAuth, process.env.SECRET!) as JwtPayload;
     console.log(decoded.id)
 
     if (!mongoose.isValidObjectId(todoId)) throw createHttpError(400, "invalid todo id")
@@ -70,9 +74,10 @@ export const createTodo: RequestHandler<unknown, unknown, ITodo, unknown> = asyn
 
     assertIsDefine("cookie", getCookieAuth);
 
+    if (!process.env.SECRET) throw createHttpError(404, " undefined secret key ");
+
     // Type assertion to JwtPayload (haven't used yet)
-    const decoded = jwt.verify(getCookieAuth, process.env.SECRET_WORD!) as JwtPayload;
-    console.log(decoded.id)
+    const decoded = jwt.verify(getCookieAuth, process.env.SECRET!) as JwtPayload;
 
     if (!text) throw createHttpError(400, "todo must have a text")
     const newTodo = await TodoModel.create({
@@ -97,22 +102,23 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
     assertIsDefine("cookie", getCookieAuth);
 
+    if (!process.env.SECRET) throw createHttpError(404, " undefined secret key ");
+
     // Type assertion to JwtPayload (haven't used yet)
-    const decoded = jwt.verify(getCookieAuth, process.env.SECRET_WORD!) as JwtPayload;
-    console.log(decoded.id)
+    const decoded = jwt.verify(getCookieAuth, process.env.SECRET!) as JwtPayload;
 
     assertIsDefine("cookie", decoded.id);
 
     if (!mongoose.isValidObjectId(todoId)) throw createHttpError(400, "invalid todo id")
     if (!text) throw createHttpError(400, "todo must have a title")
 
-    const todo = await TodoModel.findById(todoId).exec() 
+    const todo = await TodoModel.findById(todoId).exec()
 
     if (!todo) throw createHttpError(404, "todo not found");
 
     if (todo && todo.userId && !todo.userId.equals(decoded.id)) {
       throw createHttpError(401, "you cannot access this todo")
-    } 
+    }
 
     todo.todoState = newTodoState;
     todo.text = newText;
@@ -133,9 +139,10 @@ export const deleteNote: RequestHandler = async (req, res, next) => {
     // assertIsDefine("cookie", decoded.id);
     assertIsDefine("cookie", getCookieAuth);
 
+    if (!process.env.SECRET) throw createHttpError(404, " undefined secret key ");
+
     // Type assertion to JwtPayload (haven't used yet)
-    const decoded = jwt.verify(getCookieAuth, process.env.SECRET_WORD!) as JwtPayload;
-    console.log(decoded.id)
+    const decoded = jwt.verify(getCookieAuth, process.env.SECRET!) as JwtPayload;
 
     assertIsDefine("cookie", decoded.id);
     if (!mongoose.isValidObjectId(todoId)) throw createHttpError(400, "invalid todo id")

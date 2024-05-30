@@ -36,7 +36,9 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
 // import { graphqlHTTP } from "express-graphql";
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const listRoutes_1 = __importDefault(require("./routes/listRoutes"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const verifyJwtCookie_1 = require("./middlewares/verifyJwtCookie");
 dotenv_1.default.config({ path: "../.env" });
 // import schema from "./schema/Schema"
 const app = (0, express_1.default)();
@@ -56,7 +58,7 @@ const dirname = path_1.default.dirname(path_1.default.resolve());
 // console.log(newPath);
 // routes
 app.use("/api/users", userRoutes_1.default);
-app.use("/api/todos,");
+app.use("/api/todos", verifyJwtCookie_1.verifyToken, listRoutes_1.default);
 // use the frontend app
 app.use(express_1.default.static(path_1.default.join(dirname, "/app/dist")));
 console.log(dirname);

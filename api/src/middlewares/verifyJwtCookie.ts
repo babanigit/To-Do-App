@@ -13,7 +13,7 @@ export const verifyToken = (req: AuthenticatedRequest, res: Response, next: Next
 
     if (!token) throw createHttpError(401, "you are not authenticated! (MW)");
 
-    if (!process.env.SECRET)  throw createHttpError(404, " undifiend secret key (MW)");
+    if (!process.env.SECRET)  throw createHttpError(404, " undefined secret key (MW)");
     
     // verify token
     jwt.verify(token, process.env.SECRET, (err: any, user: any) => {

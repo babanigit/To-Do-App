@@ -1,4 +1,3 @@
-
 import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -12,8 +11,10 @@ import path from 'path';
 // import { graphqlHTTP } from "express-graphql";
 
 import userRouter from "./routes/userRoutes"
+import listRouter from "./routes/listRoutes"
 
 import dotenv from "dotenv";
+import { verifyToken } from "./middlewares/verifyJwtCookie";
 dotenv.config({ path: "../.env" });
 
 // import schema from "./schema/Schema"
@@ -37,12 +38,9 @@ const dirname = path.dirname(path.resolve());
 // const newPath = path.join(parentDirname, path.basename(dirname));
 // console.log(newPath);
 
-
 // routes
 app.use("/api/users", userRouter)
-app.use("/api/todos,")
-
-
+app.use("/api/todos", verifyToken, listRouter)
 
 // use the frontend app
 app.use(express.static(path.join(dirname, "/app/dist")));
@@ -81,6 +79,5 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
         statusCode
     });
 });
-
 
 export default app;

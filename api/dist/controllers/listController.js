@@ -24,8 +24,10 @@ const getTodos = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         const getCookieAuth = req.cookies.access_token;
         // assertIsDefine("cookie", decoded.id);
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!process.env.SECRET)
+            throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
-        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET_WORD);
+        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
         const notes = yield listSchema_1.default.find({ userId: decoded.id }).exec();
         res.status(200).json(notes);
     }
@@ -39,8 +41,10 @@ const getTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         const todoId = req.params.todoId;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!process.env.SECRET)
+            throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
-        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET_WORD);
+        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
         console.log(decoded.id);
         if (!mongoose_1.default.isValidObjectId(todoId))
             throw (0, http_errors_1.default)(400, "invalid todo id");
@@ -62,9 +66,10 @@ const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const { todoState, text } = req.body;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!process.env.SECRET)
+            throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
-        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET_WORD);
-        console.log(decoded.id);
+        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
         if (!text)
             throw (0, http_errors_1.default)(400, "todo must have a text");
         const newTodo = yield listSchema_1.default.create({
@@ -86,9 +91,10 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const newText = req.body.text;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!process.env.SECRET)
+            throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
-        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET_WORD);
-        console.log(decoded.id);
+        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
         (0, assertIsDefine_1.assertIsDefine)("cookie", decoded.id);
         if (!mongoose_1.default.isValidObjectId(todoId))
             throw (0, http_errors_1.default)(400, "invalid todo id");
@@ -116,9 +122,10 @@ const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const getCookieAuth = req.cookies.access_token;
         // assertIsDefine("cookie", decoded.id);
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!process.env.SECRET)
+            throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
-        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET_WORD);
-        console.log(decoded.id);
+        const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
         (0, assertIsDefine_1.assertIsDefine)("cookie", decoded.id);
         if (!mongoose_1.default.isValidObjectId(todoId))
             throw (0, http_errors_1.default)(400, "invalid todo id");

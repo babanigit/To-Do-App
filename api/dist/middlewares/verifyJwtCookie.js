@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
         if (!token)
             throw (0, http_errors_1.default)(401, "you are not authenticated! (MW)");
         if (!process.env.SECRET)
-            throw (0, http_errors_1.default)(404, " undifiend secret key (MW)");
+            throw (0, http_errors_1.default)(404, " undefined secret key (MW)");
         // verify token
         jsonwebtoken_1.default.verify(token, process.env.SECRET, (err, user) => {
             if (err)
