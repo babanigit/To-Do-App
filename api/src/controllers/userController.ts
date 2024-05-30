@@ -5,7 +5,7 @@ import express, {
   NextFunction,
   RequestHandler,
 } from "express";
-import { Document } from "mongoose";
+
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
@@ -15,15 +15,14 @@ import UserModel from "../models/userSchema";
 import { assertIsDefine } from "../middlewares/assertIsDefine";
 
 export interface IUser {
-    username?: string | null | undefined;
+  username?: string | null | undefined;
   email?: string | null | undefined;
   password?: string | null | undefined;
-    _id?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    __v?: number;
-  }
-  
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
+}
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   try {
@@ -38,7 +37,6 @@ export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
     ) as JwtPayload;
 
     res.status(200).json(decoded.user);
-
   } catch (error) {
     next(error);
   }

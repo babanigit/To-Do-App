@@ -6,11 +6,11 @@ const todoSchema = new mongoose.Schema({
         require: true
     },
 
-    data: {
+    text: {
         type: String,
         required: true
     },
-    done: {
+    todoState: {
         type: Boolean,
         default: false
     },

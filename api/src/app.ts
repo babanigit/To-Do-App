@@ -40,6 +40,7 @@ const dirname = path.dirname(path.resolve());
 
 // routes
 app.use("/api/users", userRouter)
+app.use("/api/todos,")
 
 
 

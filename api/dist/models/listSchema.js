@@ -29,11 +29,11 @@ const todoSchema = new mongoose_1.default.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         require: true
     },
-    data: {
+    text: {
         type: String,
         required: true
     },
-    done: {
+    todoState: {
         type: Boolean,
         default: false
     },

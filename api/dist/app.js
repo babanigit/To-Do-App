@@ -56,6 +56,7 @@ const dirname = path_1.default.dirname(path_1.default.resolve());
 // console.log(newPath);
 // routes
 app.use("/api/users", userRoutes_1.default);
+app.use("/api/todos,");
 // use the frontend app
 app.use(express_1.default.static(path_1.default.join(dirname, "/app/dist")));
 console.log(dirname);
