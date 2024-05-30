@@ -115,7 +115,7 @@ export const getLogin = async (
       throw new Error("Password or user password is not a string");
 
     const passwdMatch = await bcrypt.compare(password, user.password);
-
+    
     if (!passwdMatch) throw createHttpError(401, "invalid credentials");
 
     // generating token
