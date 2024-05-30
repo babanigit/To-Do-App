@@ -22,5 +22,5 @@ const todoSchema = new mongoose.Schema({
 
 type todo = InferSchemaType<typeof todoSchema>;
 
-const TodoModel = mongoose.model<todo>("todoData", todoSchema)
+const TodoModel = mongoose.model<todo>("TodoData", todoSchema)
 export default TodoModel;

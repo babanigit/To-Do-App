@@ -42,5 +42,5 @@ const todoSchema = new mongoose_1.default.Schema({
         default: Date.now
     }
 });
-const TodoModel = mongoose_1.default.model("todoData", todoSchema);
+const TodoModel = mongoose_1.default.model("TodoData", todoSchema);
 exports.default = TodoModel;

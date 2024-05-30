@@ -35,6 +35,7 @@ const http_errors_1 = __importStar(require("http-errors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
 // import { graphqlHTTP } from "express-graphql";
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "../.env" });
 // import schema from "./schema/Schema"
@@ -54,6 +55,7 @@ const dirname = path_1.default.dirname(path_1.default.resolve());
 // const newPath = path.join(parentDirname, path.basename(dirname));
 // console.log(newPath);
 // routes
+app.use("/api/users", userRoutes_1.default);
 // use the frontend app
 app.use(express_1.default.static(path_1.default.join(dirname, "/app/dist")));
 console.log(dirname);
@@ -79,8 +81,8 @@ app.use((error, req, res, next) => {
         errorMessage = error.message;
     }
     res.status(statusCode).json({
-        error: errorMessage,
         success,
+        message: errorMessage,
         statusCode
     });
 });

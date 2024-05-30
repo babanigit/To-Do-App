@@ -11,6 +11,8 @@ import path from 'path';
 
 // import { graphqlHTTP } from "express-graphql";
 
+import userRouter from "./routes/userRoutes"
+
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
 
@@ -37,6 +39,8 @@ const dirname = path.dirname(path.resolve());
 
 
 // routes
+app.use("/api/users", userRouter)
+
 
 
 // use the frontend app
@@ -61,19 +65,19 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 
     let errorMessage = "an unknown error occurred";
     let statusCode = 500;
-    let success= false;
+    let success = false;
 
-    console.error("👺[error log]:",error);
+    console.error("👺[error log]:", error);
 
     if (isHttpError(error)) {
         statusCode = error.status;
         errorMessage = error.message;
     }
     res.status(statusCode).json({
-         error: errorMessage,
-         success,
-         statusCode
-        });
+        success,
+        message: errorMessage,
+        statusCode
+    });
 });
 
 
