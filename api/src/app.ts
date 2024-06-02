@@ -9,14 +9,12 @@ import cookieParser from "cookie-parser"
 import path from 'path';
 
 // import { graphqlHTTP } from "express-graphql";
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 
 import userRouter from "./routes/userRoutes"
 import listRouter from "./routes/listRoutes"
-
-import dotenv from "dotenv";
 import { verifyToken } from "./middlewares/verifyJwtCookie";
-dotenv.config({ path: "../.env" });
-
 // import schema from "./schema/Schema"
 
 const app: Express = express();
