@@ -35,11 +35,11 @@ const http_errors_1 = __importStar(require("http-errors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
 // import { graphqlHTTP } from "express-graphql";
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: "../.env" });
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const listRoutes_1 = __importDefault(require("./routes/listRoutes"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const verifyJwtCookie_1 = require("./middlewares/verifyJwtCookie");
-dotenv_1.default.config({ path: "../.env" });
 // import schema from "./schema/Schema"
 const app = (0, express_1.default)();
 app.use(express_1.default.json());

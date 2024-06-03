@@ -1,33 +1,62 @@
-import { ConflictError, UnauthorizedError } from "../error/httpError";
-import { IUserModel } from "../modal/userModal";
+// import { ConflictError, UnauthorizedError } from "../error/httpError";
+import { ILoginCred, IRegisterCred, IUserModel } from "../modal/userModal";
 
-const todoLink = "api/todos/";
+// const todoLink = "api/todos/";
 const userLink = "api/users/";
 
 // fetcher.
-async function fetchData(input: RequestInfo, init?: RequestInit) {
+const fetchData = async (input: RequestInfo, init?: RequestInit) => {
   const res = await fetch(input, init);
 
   if (res.ok) return res;
   else {
     const errorBody = await res.json();
-    const errormessage = errorBody.error;
+    const message = errorBody.message;
 
-    if (res.status === 401) throw new UnauthorizedError(errormessage);
-    else if (res.status === 409) throw new ConflictError(errormessage);
-    else
-      throw Error(
-        "request failed with status: " + res.status + " message " + errormessage
-      );
+    throw Error(
+      "request failed with status: " + res.status + " [error is] : " + message
+    );
   }
-}
+};
 
-export async function getLoggedInUser():Promise<IUserModel> {
-    const res=await fetchData(userLink,{
-        method:"GET"
-    });
-    return res.json();
-}
+//get logged in user
+export const getLoggedInUser = async (): Promise<IUserModel> => {
+  const res = await fetchData(userLink, {
+    method: "GET",
+  });
+  console.log("from getlogged in user is : ", res);
+
+  return res.json();
+};
 
 //get register
+export const getRegisterUser = async (
+  credential: IRegisterCred
+): Promise<IUserModel> => {
+  const res = await fetchData(userLink + "register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credential),
+  });
 
+  return res.json();
+};
+
+//get login
+export const getLoginUser = async (
+  Credential: ILoginCred
+): Promise<IUserModel> => {
+  console.log("getLoginUserFetchData ", Credential);
+
+  const res = await fetchData(userLink + "login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Credential),
+  });
+
+  return res.json();
+};
