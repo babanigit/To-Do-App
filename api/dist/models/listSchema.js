@@ -33,6 +33,10 @@ const todoSchema = new mongoose_1.default.Schema({
         type: String,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
     todoState: {
         type: Boolean,
         default: false

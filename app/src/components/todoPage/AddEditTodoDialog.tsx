@@ -27,7 +27,7 @@ const AddEditTodoDialog = ({
         isSubmitting },
   } = useForm<ITodoModel>({
     defaultValues: {
-      todoState: todosToEdit?.todoState ,
+      title: todosToEdit?.title || ""  ,
       text: todosToEdit?.text || "",
     },
   });
@@ -66,7 +66,7 @@ const AddEditTodoDialog = ({
           <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
             
             <TextInputField
-              name="todoState"
+              name="title"
               label="Title"
               register={register}
               registerOptions={{ required: "Required todoState" }}

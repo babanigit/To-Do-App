@@ -1,4 +1,5 @@
 import mongoose, { InferSchemaType, Schema } from "mongoose";
+import { title } from "process";
 
 const todoSchema = new mongoose.Schema({
     userId: {
@@ -7,6 +8,10 @@ const todoSchema = new mongoose.Schema({
     },
 
     text: {
+        type: String,
+        required: true
+    },
+    title: {
         type: String,
         required: true
     },

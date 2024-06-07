@@ -18,7 +18,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const assertIsDefine_1 = require("../middlewares/assertIsDefine");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const listSchema_1 = __importDefault(require("../models/listSchema"));
-const consumers_1 = require("stream/consumers");
 const getTodos = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getCookieAuth = req.cookies.access_token;
@@ -63,9 +62,11 @@ const getTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 exports.getTodo = getTodo;
 const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { todoState, text } = req.body;
+        const { todoState, text, title } = req.body;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
+        if (!title)
+            throw (0, http_errors_1.default)(400, "todo must have a title");
         if (!process.env.SECRET)
             throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
@@ -75,6 +76,7 @@ const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const newTodo = yield listSchema_1.default.create({
             userId: decoded.id, //here we stored new property "userId" which has req.cookie.userId
             todoState,
+            title,
             text,
         });
         res.status(201).json(newTodo);
@@ -87,7 +89,8 @@ exports.createTodo = createTodo;
 const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const todoId = req.params.todoId;
-        const newTodoState = req.body.title;
+        const newTodoState = req.body.todoState;
+        const newTitle = req.body.title;
         const newText = req.body.text;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
@@ -98,8 +101,6 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         (0, assertIsDefine_1.assertIsDefine)("cookie", decoded.id);
         if (!mongoose_1.default.isValidObjectId(todoId))
             throw (0, http_errors_1.default)(400, "invalid todo id");
-        if (!consumers_1.text)
-            throw (0, http_errors_1.default)(400, "todo must have a title");
         const todo = yield listSchema_1.default.findById(todoId).exec();
         if (!todo)
             throw (0, http_errors_1.default)(404, "todo not found");
@@ -108,6 +109,7 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         }
         todo.todoState = newTodoState;
         todo.text = newText;
+        todo.title = newTitle;
         const updateTodo = yield todo.save();
         res.status(201).json(updateTodo);
     }

@@ -6,15 +6,17 @@ import { assertIsDefine } from "../middlewares/assertIsDefine";
 
 import jwt from "jsonwebtoken";
 
-interface ITodo {
+export interface ITodo {
   todoState?: boolean;
   text?: string;
+  title?:string;
   // userId?:string;
 }
 
 import { JwtPayload } from "jsonwebtoken";
 import TodoModel from "../models/listSchema";
 import { text } from "stream/consumers";
+import { title } from "process";
 
 export const getTodos = async (
   req: Request,
@@ -84,10 +86,13 @@ export const createTodo: RequestHandler<
   unknown
 > = async (req, res, next) => {
   try {
-    const { todoState, text }: ITodo = req.body;
+    const { todoState, text,title }: ITodo = req.body;
     const getCookieAuth = req.cookies.access_token;
 
     assertIsDefine("cookie", getCookieAuth);
+
+        if (!title) throw createHttpError(400, "todo must have a title");
+
 
     if (!process.env.SECRET)
       throw createHttpError(404, " undefined secret key ");
@@ -102,6 +107,7 @@ export const createTodo: RequestHandler<
     const newTodo = await TodoModel.create({
       userId: decoded.id, //here we stored new property "userId" which has req.cookie.userId
       todoState,
+      title,
       text,
     });
     res.status(201).json(newTodo);
@@ -113,7 +119,8 @@ export const createTodo: RequestHandler<
 export const updateTodo: RequestHandler = async (req, res, next) => {
   try {
     const todoId = req.params.todoId;
-    const newTodoState = req.body.title;
+    const newTodoState = req.body.todoState;
+    const newTitle= req.body.title;
     const newText = req.body.text;
     const getCookieAuth = req.cookies.access_token;
 
@@ -132,7 +139,6 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
     if (!mongoose.isValidObjectId(todoId))
       throw createHttpError(400, "invalid todo id");
-    if (!text) throw createHttpError(400, "todo must have a title");
 
     const todo = await TodoModel.findById(todoId).exec();
 
@@ -144,6 +150,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
     todo.todoState = newTodoState;
     todo.text = newText;
+    todo.title=newTitle;
 
     const updateTodo = await todo.save();
     res.status(201).json(updateTodo);
