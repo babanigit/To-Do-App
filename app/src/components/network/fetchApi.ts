@@ -12,9 +12,8 @@ const fetchData = async (input: RequestInfo, init?: RequestInit) => {
   else {
     const errorBody = await res.json();
     const message = errorBody.message;
-
     throw Error(
-      "request failed with status: " + res.status + " [error is] : " + message
+      "👺 error from backend [error statusCode]:" + res.status + ", [error Message]:" + message
     );
   }
 };
@@ -60,3 +59,8 @@ export const getLoginUser = async (
 
   return res.json();
 };
+
+// get logout
+export async function getLogout(){
+  await fetchData(userLink+"logout",{method:"POST"});
+}

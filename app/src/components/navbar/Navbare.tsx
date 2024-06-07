@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IUserModel } from "../modal/userModal";
-import NavLogIn from "./NavLogIn";
+import NavLoggedInUser from "./NavLoggedInUser";
 import NavLogOut from "./NavLogOut";
 
 interface INavBarProps {
@@ -13,16 +13,18 @@ interface INavBarProps {
 
 const Navbare = ({
   loggedInUser,
-  onLoginClicked,
   onLogoutSuccessful,
+
+  onLoginClicked,
   onRegisterClicked,
+
 }: INavBarProps) => {
   return (
     <div>
       <Navbar bg="secondary" variant="dark" expand="lg" sticky="top">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            note app
+            Todo App
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="main-navbar" />
           <Navbar.Collapse role={""} id="main-navbar">
@@ -32,8 +34,9 @@ const Navbare = ({
               </Nav.Link>
             </Nav>
             <Nav className="ms-auto">
+
               {loggedInUser ? (
-                <NavLogIn
+                <NavLoggedInUser
                   user={loggedInUser}
                   onLogoutSuccessful={onLogoutSuccessful}
                 />
@@ -43,6 +46,7 @@ const Navbare = ({
                   onRegisterClicked={onRegisterClicked}
                 />
               )}
+              
             </Nav>
           </Navbar.Collapse>
         </Container>

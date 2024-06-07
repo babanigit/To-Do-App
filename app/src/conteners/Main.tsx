@@ -7,19 +7,19 @@ import { IUserModel } from "../components/modal/userModal";
 import Navbare from "../components/navbar/Navbare";
 import { Container } from "react-bootstrap";
 import TodoPage from "../pages/TodoPage";
-
-
+import RegisterModel from "../components/registerAndLogin/RegisterModel";
+import LoginModel from "../components/registerAndLogin/LoginModel";
 
 const Main = () => {
-  const [loggedInUser, setLoggedInUser] = useState<IUserModel |null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     async function fetchLoggedInUser() {
       try {
         const user = await api.getLoggedInUser();
+
         console.log("logged in user is:  ", user);
         setLoggedInUser(user);
       } catch (error) {
@@ -28,46 +28,42 @@ const Main = () => {
     }
 
     fetchLoggedInUser();
+  }, []);
 
-  },[])
+  return (
+    <>
+      <BrowserRouter>
+        <Navbare
+          loggedInUser={loggedInUser}
+          onLoginClicked={() => {
+            setShowLogModel(true);
+            setShowRegModel(false);
+          }}
+          onRegisterClicked={() => {
+            setShowRegModel(true);
+            setShowLogModel(false);
+          }}
+          onLogoutSuccessful={() => setLoggedInUser(null)}
+        />
 
-  return (<>
+        <Container>
+          <Routes>
+            <Route
+              path="/"
+              element={<TodoPage loggedInUser={loggedInUser} />}
+            />
+          </Routes>
+        </Container>
 
-  <BrowserRouter>
-  <Navbare
-  loggedInUser={loggedInUser}
-  onLoginClicked={()=> setShowLogModel(true)}
-  onRegisterClicked={() => setShowRegModel(true)}
-  onLogoutSuccessful={() => setLoggedInUser(null)}
-  />
+        {showRegModel && <div> <RegisterModel/> </div>}
 
-  <Container>
-    <Routes >
-      <Route path="/" element={ <TodoPage loggedInUser={loggedInUser} />  } />
-    </Routes>
-  </Container>
+        {showLogModel && <div> <LoginModel  onLoginSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowLogModel(false);
+          }}/> </div>}
+      </BrowserRouter>
+    </>
+  );
+};
 
-  {
-    showRegModel && (
-    <div>
-      reigister
-    </div>
-    )
-  }
-
-  {
-    showLogModel && (
-      <div>
-        login
-      </div>
-    )
-  }
-
-  </BrowserRouter>
-  
-  
-  </>
-  )
-}
-
-export default Main
+export default Main;

@@ -1,7 +1,6 @@
 import { IUserModel } from "../components/modal/userModal";
 import TodoPageLoggedIn from "../components/todoPage/TodoPageLoggedIn";
 
-
 export interface ITodoPageProps {
   loggedInUser: IUserModel | null;
 }
@@ -9,7 +8,22 @@ export interface ITodoPageProps {
 const TodoPage = ({ loggedInUser }: ITodoPageProps) => {
   return (
     <>
-      <div>{loggedInUser ? <> <TodoPageLoggedIn />  </> : <> <div> your are not logged in</div> </>}</div>
+      <div>
+        {loggedInUser ? (
+          <>
+            {" "}
+            <TodoPageLoggedIn />{" "}
+          </>
+        ) : (
+          <>
+            {" "}
+            <div className=" flex justify-center place-content-center ">
+              {" "}
+              You are not logged in.
+            </div>{" "}
+          </>
+        )}
+      </div>
     </>
   );
 };

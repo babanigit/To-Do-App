@@ -2,7 +2,7 @@ import React from 'react'
 
 const TodoPageLoggedIn = () => {
   return (
-    <div>TodoPageLoggedIn</div>
+    <div> you are logged in TodoPageLoggedIn</div>
   )
 }
 
