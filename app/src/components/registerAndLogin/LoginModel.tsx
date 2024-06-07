@@ -10,13 +10,14 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
   const [formData, setFormData] = useState({});
   // const { loading, error } = useSelector((state) => state.user);
 
-  const [errorData, setErrorData] = useState("");
+//   const [errorData, setErrorData] = useState("");
 
-  const handleChange = async (e) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    console.log(formData);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       //   dispatch(signInStart());
@@ -29,15 +30,17 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      setErrorData(data);
+    //   setErrorData(data);
       console.log("data is ", data);
-      onLoginSuccessful(data);
+      
 
 
       if (data.success === false) {
         // dispatch(signInFailure(data));
         return;
       }
+      onLoginSuccessful(data);
+
       // sharing data to current user in redux
       //   dispatch(signInSuccess(data));
       //   navigate("/home");

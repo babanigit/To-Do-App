@@ -1,4 +1,4 @@
-export interface NoteModel{
+export interface ITodoModel{
     _id:string;
     todoState?:boolean;
     text:string;

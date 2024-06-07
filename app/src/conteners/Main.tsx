@@ -55,7 +55,10 @@ const Main = () => {
           </Routes>
         </Container>
 
-        {showRegModel && <div> <RegisterModel/> </div>}
+        {showRegModel && <div> <RegisterModel onRegistrationSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowRegModel(false);
+          }}/> </div>}
 
         {showLogModel && <div> <LoginModel  onLoginSuccessful={(user) => {
             setLoggedInUser(user);

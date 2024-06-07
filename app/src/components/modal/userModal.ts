@@ -1,5 +1,5 @@
 export interface IUserModel {
-  userName: string;
+  username: string;
   email: string;
 }
 

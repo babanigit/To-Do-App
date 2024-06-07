@@ -11,16 +11,13 @@ const TodoPage = ({ loggedInUser }: ITodoPageProps) => {
       <div>
         {loggedInUser ? (
           <>
-            {" "}
-            <TodoPageLoggedIn />{" "}
+            <TodoPageLoggedIn />
           </>
         ) : (
           <>
-            {" "}
             <div className=" flex justify-center place-content-center ">
-              {" "}
               You are not logged in.
-            </div>{" "}
+            </div>
           </>
         )}
       </div>

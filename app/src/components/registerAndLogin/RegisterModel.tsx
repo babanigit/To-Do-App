@@ -11,21 +11,21 @@ const RegisterModel = ({
   onRegistrationSuccessful,
 }: RegisterModelProps) => {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorData, setErrorData] = useState("");
+//   const [error, setError] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [errorData, setErrorData] = useState("");
 
-  const handleChange = async (e) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     console.log(formData);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      setLoading(true);
-      setError(false);
+    //   setLoading(true);
+    //   setError(false);
 
       const res = await fetch("/api/users/register", {
         method: "POST",
@@ -36,19 +36,20 @@ const RegisterModel = ({
       });
       const data = await res.json();
 
-      setErrorData(data);
+    //   setErrorData(data);
       console.log(data);
-      onRegistrationSuccessful(data);
 
-
-      setLoading(false);
       if (data.success === false) {
-        setError(true);
+        // dispatch(signInFailure(data));
         return;
       }
+      onRegistrationSuccessful(data);
+
+     
     } catch (error) {
-      setLoading(false);
-      setError(true);
+        console.error(error)
+    //   setLoading(false);
+    //   setError(true);
     }
   };
 
