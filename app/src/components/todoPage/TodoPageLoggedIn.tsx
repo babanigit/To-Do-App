@@ -5,6 +5,8 @@ import { FaPlus } from 'react-icons/fa';
 import AddEditTodoDialog from './AddEditTodoDialog';
 import Todo from './Todo';
 
+import * as NotesApi from "../network/fetchApi"
+
 const TodoPageLoggedIn = () => {
 
   const [todos, setTodos] = useState<ITodoModel[]>([]);
@@ -17,21 +19,58 @@ const TodoPageLoggedIn = () => {
 
   useEffect(()=>{
 
-  },[])
+    async function loadTodos() {
+
+      try {
+
+        setShowTodosLoadingError(false);
+        setShowTodosLoading(true);
+
+        const notes = await NotesApi.fetchTodos();
+
+        console.log(notes);
+        setTodos(notes);
+        
+      } catch (error) {
+        console.error(error);
+        alert(error);
+        setShowTodosLoadingError(true);
+      } finally {
+        setShowTodosLoading(false);
+      }
+      
+    }
+
+    loadTodos();
+  },[showAddTodos,todoToEdit])
+
+    // to delete note
+    async function deleteTodos(todos: ITodoModel) {
+      try {
+        await NotesApi.deleteTodos(todos._id);
+  
+        // setNotes
+        setTodos(todos.filter((existingTodo:ITodoModel) => existingTodo._id !== todos._id));
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+  
 
 
   const todoGrid =
   <Row xs={1} md={2} xl={3}
-    className={`g-4 ${styles.notesGrid} `}
+    className={`g-4  `}
   >
 
-    {todos.map((note) => (
-      <Col className=" p-2" key={note._id}>
+    {todos.map((todos) => (
+      <Col className=" p-2" key={todos._id}>
         <Todo
           todos={todos}
-          className={styles.note}
-          onNoteClicked={setNoteToEdit}
-          onDeleteNoteClicked={deleteNote}
+          // className={styles.note}
+          ontodosClicked={setTodoToEdit}
+          onDeleteTodosClicked={deleteTodos}
         />
       </Col>
     ))}
@@ -65,12 +104,29 @@ const TodoPageLoggedIn = () => {
                 showAddTodos &&
                 <AddEditTodoDialog
                     onDismiss={() => setShowAddTodos(false)}
-                    onNoteSaved={(newNote) => {
-                        setTodos([...todos, newNote])
+                    onTodosSaved={(newTodos: ITodoModel) => {
+                        setTodos([...todos, newTodos])
                         setShowAddTodos(false)
                     }}
                 />
             }
+
+{todoToEdit && (
+        <AddEditTodoDialog
+          todosToEdit={todoToEdit}
+          onDismiss={() => setTodoToEdit(null)}
+          onTodosSaved={(updateTodos) => {
+            setTodos(
+              todos.map((existingNote) =>
+                existingNote._id === updateTodos._id
+                  ? updateTodos
+                  : existingNote
+              )
+            );
+            setTodoToEdit(null);
+          }}
+        />
+      )}
 
     </>
   )

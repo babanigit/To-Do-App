@@ -20,7 +20,8 @@ const Main = () => {
       try {
         const user = await api.getLoggedInUser();
 
-        console.log("logged in user is:  ", user);
+        console.log("logged in user :  ", user);
+
         setLoggedInUser(user);
       } catch (error) {
         console.error(error);
