@@ -45,12 +45,12 @@ const TodoPageLoggedIn = () => {
   },[showAddTodos,todoToEdit])
 
     // to delete note
-    async function deleteTodos(todos: ITodoModel) {
+    async function deleteTodos(todo: ITodoModel) { 
       try {
-        await NotesApi.deleteTodos(todos._id);
+        await NotesApi.deleteTodos(todo._id);
   
         // setNotes
-        setTodos(todos.filter((existingTodo:ITodoModel) => existingTodo._id !== todos._id));
+        setTodos(todos.filter((existingTodo) => existingTodo._id !== todo._id));
       } catch (error) {
         console.error(error);
         alert(error);
