@@ -1,16 +1,28 @@
 import { useState } from "react";
 import { IUserModel } from "../modal/userModal";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../redux/user/UserSlice";
+import { Spinner } from "react-bootstrap";
+
 interface LoginModelProps {
-    // onDismiss: () => void;
-    onLoginSuccessful: (user: IUserModel) => void;
+  // onDismiss: () => void;
+  onLoginSuccessful: (user: IUserModel) => void;
 }
 
 const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
   const [formData, setFormData] = useState({});
-  // const { loading, error } = useSelector((state) => state.user);
+  const { loading, error, currentUser } = useAppSelector(
+    (state) => state.userDataInfo
+  );
 
-//   const [errorData, setErrorData] = useState("");
+  const dispatch = useAppDispatch();
+
+  console.log("from redux currentUser", currentUser)
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -20,8 +32,8 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      //   dispatch(signInStart());
 
+      dispatch(signInStart());
       const res = await fetch("/api/users/login", {
         method: "POST",
         headers: {
@@ -30,23 +42,18 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-    //   setErrorData(data);
       console.log("data is ", data);
-      
-
 
       if (data.success === false) {
-        // dispatch(signInFailure(data));
+        console.log("login error data :-", data);
+        dispatch(signInFailure(data));
         return;
       }
       onLoginSuccessful(data);
 
-      // sharing data to current user in redux
-      //   dispatch(signInSuccess(data));
-      //   navigate("/home");
+      dispatch(signInSuccess(data));
     } catch (error) {
-      console.error(error);
-      //   dispatch(signInFailure(error));
+      dispatch(signInFailure(error));
     }
   };
 
@@ -92,24 +99,22 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
               //   disabled={loading}
               className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
             >
-              Login
-              {/* {loading ? "Loading..." : "Sign In"} */}
+              {loading ? <Spinner /> : "Login"}
             </button>
             {/* 
             <OAuth /> */}
           </form>
 
-          <div className="flex gap-2 mt-5">
-            {/* <p>Dont Have an account?</p>
+          {/* <div className="flex gap-2 mt-5">
+            <p>Dont Have an account?</p>
             <Link to="/signup">
               <span className="text-blue-500">Sign up</span>
-            </Link> */}
-          </div>
+            </Link>
+          </div> */}
 
-          {/* <p className="text-red-500 mt-5">
-            {error ? errorData.error || ":(" : ""}
+          <p className="text-red-500 mt-5">
+            {error ? error.message || "Something went wrong!" : ""}
           </p>
-           */}
         </div>
       </div>
     </>
