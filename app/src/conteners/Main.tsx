@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import * as api from "../components/network/fetchApi";
-import { IUserModel } from "../components/modal/userModal";
+
+// import { IUserModel } from "../components/modal/userModal";
+
 import Navbare from "../components/navbar/Navbare";
 import { Container } from "react-bootstrap";
 import TodoPage from "../pages/TodoPage";
@@ -19,12 +21,16 @@ import {
 } from "../redux/user/UserSlice";
 
 const Main = () => {
-  const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
+  // const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
     //redux
-    const { loading, error, currentUser } = useAppSelector(
+    const {
+      error,
+      //  loading,
+         currentUser 
+        } = useAppSelector(
       (state) => state.userDataInfo
     );
 
@@ -40,7 +46,7 @@ const Main = () => {
         console.log("logged in user :  ", user);
 
         dispatch(loggedInUserRedux(user))
-        setLoggedInUser(user);
+        // setLoggedInUser(user);
 
       } catch (error) {
         console.log(error)
@@ -55,7 +61,7 @@ const Main = () => {
     <>
       <BrowserRouter>
         <Navbare
-          loggedInUser={loggedInUser}
+          // loggedInUser={loggedInUser}
           onLoginClicked={() => {
             setShowLogModel(true);
             setShowRegModel(false);
@@ -64,14 +70,17 @@ const Main = () => {
             setShowRegModel(true);
             setShowLogModel(false);
           }}
-          onLogoutSuccessful={() => setLoggedInUser(null)}
+          // onLogoutSuccessful={() => setLoggedInUser(null)}
+
         />
 
         <Container>
           <Routes>
             <Route
               path="/"
-              element={<TodoPage loggedInUser={loggedInUser} />}
+              element={<TodoPage
+                 loggedInUser={currentUser} 
+                 />}
             />
           </Routes>
         </Container>
@@ -81,13 +90,13 @@ const Main = () => {
           </p>
        
 
-        {showRegModel && <div> <RegisterModel onRegistrationSuccessful={(user) => {
-            setLoggedInUser(user);
+        {showRegModel && <div> <RegisterModel onRegistrationSuccessful={() => {
+            // setLoggedInUser(user);
             setShowRegModel(false);
           }}/> </div>}
 
-        {showLogModel && <div> <LoginModel  onLoginSuccessful={(user) => {
-            setLoggedInUser(user);
+        {showLogModel && <div> <LoginModel  onLoginSuccessful={() => {
+            // setLoggedInUser(user);
             setShowLogModel(false);
           }}/> </div>}
 

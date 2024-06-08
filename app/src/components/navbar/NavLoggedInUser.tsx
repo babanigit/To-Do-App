@@ -1,20 +1,27 @@
-import { IUserModel } from "../modal/userModal";
 import {  Navbar } from "react-bootstrap";
 import * as NoteApi from "../network/fetchApi"
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
 
-interface NavBarLoggedInViewProps {
+import {
+  loggedInUserRedux,
+ } from "../../redux/user/UserSlice";
 
-  user:IUserModel,
-  onLogoutSuccessful:()=>void;
 
-}
 
-const NavLoggedInUser = ({user,onLogoutSuccessful}:NavBarLoggedInViewProps) => {
+const NavLoggedInUser = () => {
+   //redux
+   const {currentUser } = useAppSelector(
+    (state) => state.userDataInfo
+  );
+  const dispatch = useAppDispatch();
+
+
 
   async function logout() {
     try {
         await NoteApi.getLogout();
-        onLogoutSuccessful();
+        // onLogoutSuccessful();
+        dispatch(loggedInUserRedux(null))
 
     } catch (error) {
         console.error(error)
@@ -25,7 +32,7 @@ const NavLoggedInUser = ({user,onLogoutSuccessful}:NavBarLoggedInViewProps) => {
   return (
     <>
      <Navbar.Text className="me-2">
-        signed in as: {user.username}
+        signed in as: {currentUser!.username}
     </Navbar.Text>
     <button
     className=" border-2 px-3 rounded-xl"

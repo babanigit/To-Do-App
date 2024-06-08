@@ -1,28 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../redux/store'
+import type { RootState } from '../store'
+import { ITodoModel } from '../../components/modal/todoModal'
 
 // Define a type for the slice state
-interface dataInfoState {
+interface ITodoInfoState {
     value: number
 
-    currentUser :unknown
+    currentTodo : ITodoModel | null
     loading:boolean
     error:boolean
     
 }
 
 // Define the initial state using that type
-const initialState: dataInfoState = {
+const initialState: ITodoInfoState = {
     value: 0,
 
     
-    currentUser: null,
+    currentTodo:  null,
     loading: false,
     error: false,
 }
 
-export const dataInfoSlice = createSlice({
-    name: 'dataInfo',
+export const todoInfoSlice = createSlice({
+    name: 'todoInfo',
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
@@ -43,7 +44,7 @@ export const dataInfoSlice = createSlice({
             state.loading = true;
           },
           signInSuccess: (state, action) => {
-            state.currentUser = action.payload;
+            state.currentTodo = action.payload;
             state.loading = false;
             state.error = false;
           },
@@ -57,7 +58,7 @@ export const dataInfoSlice = createSlice({
             state.loading = true;
           },
           updateUserSuccess: (state, action) => {
-            state.currentUser = action.payload;
+            state.currentTodo = action.payload;
             state.loading = false;
             state.error = false;
           },
@@ -69,7 +70,7 @@ export const dataInfoSlice = createSlice({
             state.loading = true;
           },
           deleteUserSuccess: (state) => {
-            state.currentUser = null;
+            state.currentTodo = null;
             state.loading = false;
             state.error = false;
           },
@@ -78,7 +79,7 @@ export const dataInfoSlice = createSlice({
             state.error = action.payload;
           },
           signOut: (state) => {
-            state.currentUser = null;
+            state.currentTodo = null;
             state.loading = false;
             state.error = false;
           },
@@ -89,9 +90,9 @@ export const dataInfoSlice = createSlice({
     },
 })
 
-export const { increment, decrement, incrementByAmount } = dataInfoSlice.actions
+export const { increment, decrement, incrementByAmount } = todoInfoSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.dataInfo.value
+export const selectCount = (state: RootState) => state.todoDataInfo.value
 
-export default dataInfoSlice.reducer
+export default todoInfoSlice.reducer

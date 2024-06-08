@@ -43,7 +43,7 @@ export const UserDataSlice = createSlice({
             state.value += action.payload
         },
 
-        loggedInUserRedux: (state, action:PayloadAction<IUserModel >) =>{
+        loggedInUserRedux: (state, action:PayloadAction<IUserModel |null >) =>{
           state.currentUser= action.payload
         },
 
@@ -99,7 +99,7 @@ export const UserDataSlice = createSlice({
 
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.dataInfo.value
+export const selectCount = (state: RootState) => state.userDataInfo.value
 
 export const {
 

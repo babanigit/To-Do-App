@@ -14,9 +14,8 @@ const fetchData = async (input: RequestInfo, init?: RequestInit) => {
 
   else {
     const errorBody:IUserError = await res.json();
-
     const message = errorBody.message;
-    throw Error(
+    throw new Error(
             message
     );
     

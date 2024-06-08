@@ -1,16 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './counter/counterSlice'
-import dataInfoReducer from "./dataInfo/dataInfoSlice"
-import  UserDataSlice  from './user/UserSlice'
+import TodoDataReducer from "./todo/TodoSlice"
+import  UserDataReducer  from './user/UserSlice'
 
 const store = configureStore({
     reducer: {
 
         counter: counterReducer,
 
-        dataInfo: dataInfoReducer,
+        todoDataInfo: TodoDataReducer,
 
-        userDataInfo:UserDataSlice,
+        userDataInfo:UserDataReducer,
 
         //   posts: postsReducer,
         //   comments: commentsReducer,

@@ -18,6 +18,8 @@ const TodoPageLoggedIn = () => {
 
 
   useEffect(() => {
+
+    
     async function loadTodos() {
       try {
         setShowTodosLoadingError(false);
