@@ -19,10 +19,13 @@ const todoSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now
+    // }
+},
+{
+    timestamps: true,
 })
 
 type todo = InferSchemaType<typeof todoSchema>;

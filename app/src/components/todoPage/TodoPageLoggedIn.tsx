@@ -16,6 +16,7 @@ const TodoPageLoggedIn = () => {
   const [showAddTodos, setShowAddTodos] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
 
+
   useEffect(() => {
     async function loadTodos() {
       try {
@@ -38,13 +39,18 @@ const TodoPageLoggedIn = () => {
     loadTodos();
   }, [showAddTodos, todoToEdit]);
 
+
+
   // to delete note
   async function deleteTodos(todo: ITodoModel) {
+    
+    const confirm= window.confirm("are you sure?")
     try {
-      await NotesApi.deleteTodos(todo._id);
-
-      // setNotes
-      setTodos(todos.filter((existingTodo) => existingTodo._id !== todo._id));
+      if(confirm){
+        await NotesApi.deleteTodos(todo._id);
+        // setNotes
+        setTodos(todos.filter((existingTodo) => existingTodo._id !== todo._id));
+      }
     } catch (error) {
       console.error(error);
       alert(error);
@@ -59,6 +65,10 @@ const TodoPageLoggedIn = () => {
         <div className=" p-2" key={todos._id}>
           <Todo
             todos={todos}
+
+            // setTodoToEdit={setTodoToEdit}
+            // todoToEdit={todoToEdit}
+
             // className={styles.note}
             ontodosClicked={setTodoToEdit}
             onDeleteTodosClicked={deleteTodos}
@@ -90,6 +100,7 @@ const TodoPageLoggedIn = () => {
         <>{todos.length > 0 ? todoGrid : <p>you don't have any notes yet</p>}</>
       )}
 
+{/* to add */}
       {showAddTodos && (
         <AddEditTodoDialog
           onDismiss={() => setShowAddTodos(false)}
@@ -100,6 +111,7 @@ const TodoPageLoggedIn = () => {
         />
       )}
 
+{/* to edit */}
       {todoToEdit && (
         <AddEditTodoDialog
           todosToEdit={todoToEdit}

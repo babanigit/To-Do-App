@@ -41,10 +41,12 @@ const todoSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now
+    // }
+}, {
+    timestamps: true,
 });
 const TodoModel = mongoose_1.default.model("TodoData", todoSchema);
 exports.default = TodoModel;

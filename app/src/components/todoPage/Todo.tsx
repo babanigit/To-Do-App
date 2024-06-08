@@ -1,13 +1,21 @@
-import { MdCheck, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+
 import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
+import { useEffect, useState } from "react";
+
+// import * as noteApi from "../network/fetchApi";
 
 interface IProps {
   todos: ITodoModel;
   ontodosClicked: (todos: ITodoModel) => void;
   onDeleteTodosClicked: (todos: ITodoModel) => void;
   className?: string;
+
+  // setTodoToEdit: (value: ITodoModel) => void;
+  // todoToEdit: ITodoModel | null;
 }
 
 const Todo = ({
@@ -15,7 +23,24 @@ const Todo = ({
   ontodosClicked,
   // className,
   onDeleteTodosClicked,
+
+  // todoToEdit
+  // setTodoToEdit
+
 }: IProps) => {
+
+  const [todoTicked, setTodoTicked] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function clicked() {
+      console.log(todoTicked);
+
+      // await noteApi.updateTodos(todoToEdit._id, input);
+    }
+
+    clicked();
+  }, [todoTicked]);
+
   const { title, text, createdAt, updatedAt } = todos;
 
   let createdUpdatedText: string;
@@ -30,7 +55,7 @@ const Todo = ({
     <>
       <Card
         // className={`${styles.noteCard} ${className}`}
-        onClick={() => ontodosClicked(todos)}
+        onClick={() => setTodoTicked(!todoTicked)}
       >
         <Card.Body
           //  className={` ${styles.cardBody}`}
@@ -45,12 +70,7 @@ const Todo = ({
             <Card.Text>{text}</Card.Text>
           </div>
           <div className=" grid justify-between">
-
-            <MdCheck
-            onClick={(e)=>{
-              // setClick(true);
-            }}
-            />
+            <FaEdit onClick={() => ontodosClicked(todos)} />
 
             <MdDelete
               onClick={(e) => {

@@ -14,7 +14,7 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    console.log(formData);
+    // console.log(formData);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
