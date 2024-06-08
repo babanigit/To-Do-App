@@ -20,7 +20,7 @@ const initialState: IUserDataState = {
     currentUser: null,
     loading: false,
     error: null,
-    
+
 }
 
 
@@ -43,6 +43,9 @@ export const UserDataSlice = createSlice({
             state.value += action.payload
         },
 
+        loggedInUserRedux: (state, action:PayloadAction<IUserModel >) =>{
+          state.currentUser= action.payload
+        },
 
         signInStart: (state) => {
             state.loading = true;
@@ -110,6 +113,7 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   signOut,
+  loggedInUserRedux
 
 } = UserDataSlice.actions;
 

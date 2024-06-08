@@ -1,6 +1,6 @@
 // import { ConflictError, UnauthorizedError } from "../error/httpError";
 import { ITodoModel } from "../modal/todoModal";
-import { ILoginCred, IRegisterCred, IUserModel } from "../modal/userModal";
+import { ILoginCred, IRegisterCred, IUserError, IUserModel } from "../modal/userModal";
 
 // const todoLink = "api/todos/";
 const userLink = "api/users/";
@@ -11,22 +11,27 @@ const fetchData = async (input: RequestInfo, init?: RequestInit) => {
   const res = await fetch(input, init);
 
   if (res.ok) return res;
+
   else {
-    const errorBody = await res.json();
+    const errorBody:IUserError = await res.json();
+
     const message = errorBody.message;
     throw Error(
-      "👺 error from backend [error statusCode]:" + res.status + ", [error Message]:" + message
+            message
     );
+    
   }
 };
 
 //get logged in user
 export const getLoggedInUser = async (): Promise<IUserModel> => {
+
   const res = await fetchData(userLink, {
     method: "GET",
   });
 
   return res.json();
+
 };
 
 //get register

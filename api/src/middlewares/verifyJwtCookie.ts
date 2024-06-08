@@ -11,13 +11,13 @@ export const verifyToken = (req: AuthenticatedRequest, res: Response, next: Next
   try {
     const token = req.cookies.access_token;
 
-    if (!token) throw createHttpError(401, "you are not authenticated! (MW)");
+    if (!token) throw createHttpError(401, "You are not logged In (error from backend)");
 
-    if (!process.env.SECRET)  throw createHttpError(404, " undefined secret key (MW)");
+    if (!process.env.SECRET)  throw createHttpError(404, " undefined secret key ");
     
     // verify token
     jwt.verify(token, process.env.SECRET, (err: any, user: any) => {
-      if (err) throw createHttpError(403, "token is not valid! (MW) ");
+      if (err) throw createHttpError(403, "token is not valid! (error from backend) ");
       req.user = user;
       next();
     });

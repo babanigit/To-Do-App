@@ -10,21 +10,41 @@ import TodoPage from "../pages/TodoPage";
 import RegisterModel from "../components/registerAndLogin/RegisterModel";
 import LoginModel from "../components/registerAndLogin/LoginModel";
 
+//redux
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import {
+ loggedInUserRedux,
+ signInFailure,
+ signInStart
+} from "../redux/user/UserSlice";
+
 const Main = () => {
   const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
+    //redux
+    const { loading, error, currentUser } = useAppSelector(
+      (state) => state.userDataInfo
+    );
+
+    const dispatch = useAppDispatch();
+
+    
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
+        dispatch(signInStart())
         const user = await api.getLoggedInUser();
 
         console.log("logged in user :  ", user);
 
+        dispatch(loggedInUserRedux(user))
         setLoggedInUser(user);
+
       } catch (error) {
-        console.error(error);
+        console.log(error)
+        dispatch(signInFailure(error))
       }
     }
 
@@ -56,6 +76,11 @@ const Main = () => {
           </Routes>
         </Container>
 
+        <p className="text-red-500 mt-5">
+            {error && error.message}
+          </p>
+       
+
         {showRegModel && <div> <RegisterModel onRegistrationSuccessful={(user) => {
             setLoggedInUser(user);
             setShowRegModel(false);
@@ -65,6 +90,8 @@ const Main = () => {
             setLoggedInUser(user);
             setShowLogModel(false);
           }}/> </div>}
+
+
       </BrowserRouter>
     </>
   );

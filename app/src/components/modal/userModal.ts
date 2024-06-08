@@ -1,8 +1,10 @@
 export interface IUserModel {
+  _id?: string;
   username: string;
   email: string;
-
-  password: string;
+  createdAt?: string;
+  updatedAt?: string;
+  password?:string;
 }
 
 export interface IRegisterCred {

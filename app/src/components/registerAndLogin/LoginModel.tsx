@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { IUserModel } from "../modal/userModal";
 
+//redux
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
 } from "../../redux/user/UserSlice";
+
 import { Spinner } from "react-bootstrap";
 
 interface LoginModelProps {
@@ -16,10 +18,11 @@ interface LoginModelProps {
 
 const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
   const [formData, setFormData] = useState({});
+
+  //redux
   const { loading, error, currentUser } = useAppSelector(
     (state) => state.userDataInfo
   );
-
   const dispatch = useAppDispatch();
 
   console.log("from redux currentUser", currentUser)
@@ -104,13 +107,6 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
             {/* 
             <OAuth /> */}
           </form>
-
-          {/* <div className="flex gap-2 mt-5">
-            <p>Dont Have an account?</p>
-            <Link to="/signup">
-              <span className="text-blue-500">Sign up</span>
-            </Link>
-          </div> */}
 
           <p className="text-red-500 mt-5">
             {error ? error.message || "Something went wrong!" : ""}

@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { IUserModel } from "../modal/userModal";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../redux/user/UserSlice";
+import { Spinner } from "react-bootstrap";
+
 interface RegisterModelProps {
   // onDismiss: () => void;
   onRegistrationSuccessful: (user: IUserModel) => void;
@@ -11,22 +19,29 @@ const RegisterModel = ({
   onRegistrationSuccessful,
 }: RegisterModelProps) => {
   const [formData, setFormData] = useState({});
-//   const [error, setError] = useState(false);
-//   const [loading, setLoading] = useState(false);
-//   const [errorData, setErrorData] = useState("");
+
+  //redux
+  const { loading, error, currentUser } = useAppSelector(
+    (state) => state.userDataInfo
+  );
+  const dispatch = useAppDispatch();
+
+  //   const [error, setError] = useState(false);
+  //   const [loading, setLoading] = useState(false);
+  //   const [errorData, setErrorData] = useState("");
+
+  console.log(" current user from reg , redux ", currentUser)
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    // console.log(formData); 
+    // console.log(formData);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-    //   setLoading(true);
-    //   setError(false);
-
+      dispatch(signInStart());
       const res = await fetch("/api/users/register", {
         method: "POST",
         headers: {
@@ -36,20 +51,20 @@ const RegisterModel = ({
       });
       const data = await res.json();
 
-    //   setErrorData(data);
+      //   setErrorData(data);
       console.log(data);
 
       if (data.success === false) {
-        // dispatch(signInFailure(data));
+        dispatch(signInFailure(data));
         return;
       }
       onRegistrationSuccessful(data);
 
-     
+      dispatch(signInSuccess(data));
     } catch (error) {
-        console.error(error)
-    //   setLoading(false);
-    //   setError(true);
+      dispatch(signInFailure(error));
+      //   setLoading(false);
+      //   setError(true);
     }
   };
 
@@ -108,25 +123,13 @@ const RegisterModel = ({
               //   disabled={loading}
               className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
             >
-              register
-              {/* {loading ? "Loading..." : "Sign Up"} */}
+              {loading ? <Spinner /> : "Register"}
             </button>
-            {/* <OAuth /> */}
           </form>
 
-          <div className="flex gap-2 mt-5">
-            {/* <p>Have an account?</p>
-            <Link to="/signin">
-              <span className="text-blue-500">Sign in</span>
-            </Link>
-            */}
-          </div>
-
-          {/* <p className="text-red-500 mt-5">
-            {error
-              ? errorData.error || "Something went wrong(from singUp.jsx)!"
-              : ""}
-          </p> */}
+          <p className="text-red-500 mt-5">
+            {error ? error.message || "Something went wrong!" : ""}
+          </p>
         </div>
       </div>
     </>
