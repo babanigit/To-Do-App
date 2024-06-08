@@ -57,7 +57,7 @@ const TodoPageLoggedIn = () => {
     }
   }
 
-  const todoGrid = (
+  const todoGrid = ( 
     <Row 
     // xs={1} md={2} xl={3} className={`g-4  `}
     >
