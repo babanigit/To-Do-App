@@ -1,5 +1,5 @@
 import { IUserModel } from "../modal/userModal";
-import { Button, Navbar } from "react-bootstrap";
+import {  Navbar } from "react-bootstrap";
 import * as NoteApi from "../network/fetchApi"
 
 interface NavBarLoggedInViewProps {
@@ -27,7 +27,9 @@ const NavLoggedInUser = ({user,onLogoutSuccessful}:NavBarLoggedInViewProps) => {
      <Navbar.Text className="me-2">
         signed in as: {user.username}
     </Navbar.Text>
-    <Button onClick={logout}>log out</Button>
+    <button
+    className=" border-2 px-3 rounded-xl"
+    onClick={logout}>log out</button>
     </>
   )
 }

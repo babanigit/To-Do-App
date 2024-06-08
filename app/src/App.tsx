@@ -2,7 +2,8 @@
 
 import Main from "./conteners/Main";
 
-const App = () => {
+const App =  () => {
+  
   return (
     <div>
 

@@ -1,8 +1,7 @@
-import { MdDelete } from "react-icons/md";
+import { MdCheck, MdDelete } from "react-icons/md";
 import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
-
 
 interface IProps {
   todos: ITodoModel;
@@ -17,7 +16,6 @@ const Todo = ({
   // className,
   onDeleteTodosClicked,
 }: IProps) => {
-
   const { title, text, createdAt, updatedAt } = todos;
 
   let createdUpdatedText: string;
@@ -28,19 +26,32 @@ const Todo = ({
     createdUpdatedText = "created: " + FormatDate(createdAt);
   }
 
-  return (<>
-
-<Card
+  return (
+    <>
+      <Card
         // className={`${styles.noteCard} ${className}`}
         onClick={() => ontodosClicked(todos)}
       >
         <Card.Body
-        //  className={` ${styles.cardBody}`}
-         >
-          <Card.Title
+          //  className={` ${styles.cardBody}`}
+          className=" flex justify-between"
+        >
+          <div>
+            <Card.Title
             // className={`bg-red-200 rounded-md ${styleUtils.flexCenter} `}
-          >
-            {title}
+            >
+              {title}
+            </Card.Title>
+            <Card.Text>{text}</Card.Text>
+          </div>
+          <div className=" grid justify-between">
+
+            <MdCheck
+            onClick={(e)=>{
+              // setClick(true);
+            }}
+            />
+
             <MdDelete
               onClick={(e) => {
                 onDeleteTodosClicked(todos);
@@ -48,17 +59,12 @@ const Todo = ({
               }}
               className="text-muted ms-auto"
             />
-          </Card.Title>
-          <Card.Text
-          //  className={styles.cardText}
-           >{text}</Card.Text>
+          </div>
         </Card.Body>
         <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
       </Card>
-
-
-  </>);
-  
+    </>
+  );
 };
 
 export default Todo;
