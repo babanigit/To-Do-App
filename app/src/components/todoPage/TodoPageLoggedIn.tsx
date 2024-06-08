@@ -5,13 +5,29 @@ import { FaPlus } from "react-icons/fa";
 import AddEditTodoDialog from "./AddEditTodoDialog";
 import Todo from "./Todo";
 
-import * as NotesApi from "../network/fetchApi";
+import * as TodoApi from "../network/fetchApi";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import {
+
+ preLoad,
+ postLoad,
+ loadFail,
+ loadFinal,
+} from "../../redux/todo/TodoSlice";
+
 
 const TodoPageLoggedIn = () => {
-  const [todos, setTodos] = useState<ITodoModel[]>([]);
+//redux
+const {todoLoadingError, todoLoading, error, currentTodos  } = useAppSelector(
+  (state) => state.todoDataInfo
+);
+const dispatch = useAppDispatch();
 
-  const [showTodosLoading, setShowTodosLoading] = useState(true);
-  const [showTodosLoadingError, setShowTodosLoadingError] = useState(false);
+  const [todos, setTodos] = useState<ITodoModel[] >(currentTodos);
+
+  // const [showTodosLoading, setShowTodosLoading] = useState(true);
+  // const [showTodosLoadingError, setShowTodosLoadingError] = useState(false);
 
   const [showAddTodos, setShowAddTodos] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
@@ -19,29 +35,31 @@ const TodoPageLoggedIn = () => {
 
   useEffect(() => {
 
-    
     async function loadTodos() {
       try {
-        setShowTodosLoadingError(false);
-        setShowTodosLoading(true);
+        // setShowTodosLoadingError(false);
+        // setShowTodosLoading(true);
 
-        const notes = await NotesApi.fetchTodos();
+        dispatch(preLoad())
+        const todos = await TodoApi.fetchTodos();
 
-        console.log(notes);
-        setTodos(notes);
+        dispatch(postLoad(todos))
+
       } catch (error) {
-        console.error(error);
         alert(error);
-        setShowTodosLoadingError(true);
+        // setShowTodosLoadingError(true);
+
+        dispatch(loadFail(error))
       } finally {
-        setShowTodosLoading(false);
+        // setShowTodosLoading(false);
+        dispatch(loadFinal())
       }
     }
 
     loadTodos();
   }, [showAddTodos, todoToEdit]);
 
-
+console.log ( " current todos from redux ", currentTodos)
 
   // to delete note
   async function deleteTodos(todo: ITodoModel) {
@@ -49,9 +67,9 @@ const TodoPageLoggedIn = () => {
     const confirm= window.confirm("are you sure?")
     try {
       if(confirm){
-        await NotesApi.deleteTodos(todo._id);
+        await TodoApi.deleteTodos(todo._id);
         // setNotes
-        setTodos(todos.filter((existingTodo) => existingTodo._id !== todo._id));
+        setTodos(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id));
       }
     } catch (error) {
       console.error(error);
@@ -63,7 +81,7 @@ const TodoPageLoggedIn = () => {
     <Row 
     // xs={1} md={2} xl={3} className={`g-4  `}
     >
-      {todos.map((todos) => (
+      {currentTodos.map((todos) => (
         <div className=" p-2" key={todos._id}>
           <Todo
             todos={todos}
@@ -93,13 +111,13 @@ const TodoPageLoggedIn = () => {
     </div>
     
 
-      {showTodosLoading && <Spinner animation="border" variant="primary" />}
-      {showTodosLoadingError && (
+      {todoLoading && <Spinner animation="border" variant="primary" />}
+      {todoLoadingError && (
         <p> something went wrong please refresh the page.</p>
       )}
 
-      {!showTodosLoading && !showTodosLoadingError && (
-        <>{todos.length > 0 ? todoGrid : <p>you don't have any notes yet</p>}</>
+      {!todoLoading && !todoLoadingError && (
+        <>{currentTodos.length > 0 ? todoGrid : <p>you don't have any todos yet</p>}</>
       )}
 
 {/* to add */}

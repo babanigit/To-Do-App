@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 import { ITodoModel } from '../../components/modal/todoModal'
+import { IUserError } from '../../components/modal/userModal'
 
 // Define a type for the slice state
 interface ITodoInfoState {
     value: number
 
-    currentTodo : ITodoModel | null
-    loading:boolean
-    error:boolean
+    currentTodos : ITodoModel[] 
+    todoLoadingError:boolean
+    todoLoading:boolean
+    error:IUserError | null
     
 }
 
@@ -16,10 +18,12 @@ interface ITodoInfoState {
 const initialState: ITodoInfoState = {
     value: 0,
 
-    
-    currentTodo:  null,
-    loading: false,
-    error: false,
+
+    currentTodos:  [],
+    todoLoadingError: false,
+    todoLoading: false,
+
+    error: null ,
 }
 
 export const todoInfoSlice = createSlice({
@@ -40,48 +44,55 @@ export const todoInfoSlice = createSlice({
         },
 
 
-        signInStart: (state) => {
-            state.loading = true;
+        preLoad: (state) => {
+            state.todoLoadingError = false;
+            state.todoLoading=true;
           },
-          signInSuccess: (state, action) => {
-            state.currentTodo = action.payload;
-            state.loading = false;
-            state.error = false;
+          postLoad: (state, action) => {
+            state.currentTodos = action.payload;
+            // state.todoLoadingError = false;
+            // state.todoLoading=true
+            state.error = null;
           },
-          signInFailure: (state, action) => {
-            state.loading = false;
+          loadFail: (state, action) => {
+            state.todoLoadingError = true;
             state.error = action.payload;
           },
 
+          loadFinal:(state)=> {
+            state.todoLoading=false
+          },
 
-          updateUserStart: (state) => {
-            state.loading = true;
+
+          updateTodoStart: (state) => {
+            state.todoLoading = true;
           },
-          updateUserSuccess: (state, action) => {
-            state.currentTodo = action.payload;
-            state.loading = false;
-            state.error = false;
-          },
-          updateUserFailure: (state, action) => {
-            state.loading = false;
+          updateTodoSuccess: (state, action) => {
+            state.currentTodos = action.payload;
+            state.todoLoading = false;
+            state.error = null;
+          }, 
+          updateTodoFailed: (state, action) => {
+            state.todoLoading = false;
             state.error = action.payload;
           },
+          
           deleteUserStart: (state) => {
-            state.loading = true;
+            state.todoLoading = true;
           },
           deleteUserSuccess: (state) => {
-            state.currentTodo = null;
-            state.loading = false;
-            state.error = false;
+            state.currentTodos = [];
+            state.todoLoading = false;
+            state.error = null;
           },
           deleteUserFailure: (state, action) => {
-            state.loading = false;
+            state.todoLoading = false;
             state.error = action.payload;
           },
           signOut: (state) => {
-            state.currentTodo = null;
-            state.loading = false;
-            state.error = false;
+            state.currentTodos = [];
+            state.todoLoading = false;
+            state.error = null;
           },
 
 
@@ -94,5 +105,22 @@ export const { increment, decrement, incrementByAmount } = todoInfoSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.todoDataInfo.value
+
+export const {
+  preLoad,
+  postLoad,
+  loadFail,
+  loadFinal,
+
+  updateTodoFailed,
+  updateTodoStart,
+  updateTodoSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOut,
+
+} = todoInfoSlice.actions;
+
 
 export default todoInfoSlice.reducer

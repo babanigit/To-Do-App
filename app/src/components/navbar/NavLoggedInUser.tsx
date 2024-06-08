@@ -3,7 +3,8 @@ import * as NoteApi from "../network/fetchApi"
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 
 import {
-  loggedInUserRedux,
+  
+  signOut,
  } from "../../redux/user/UserSlice";
 
 
@@ -20,8 +21,8 @@ const NavLoggedInUser = () => {
   async function logout() {
     try {
         await NoteApi.getLogout();
-        // onLogoutSuccessful();
-        dispatch(loggedInUserRedux(null))
+        
+        dispatch(signOut())
 
     } catch (error) {
         console.error(error)
