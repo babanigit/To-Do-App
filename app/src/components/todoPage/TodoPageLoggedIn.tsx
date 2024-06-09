@@ -11,16 +11,15 @@ import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
 
  preLoad,
- postLoad,
+ currentAllTodos,
  loadFail,
  loadFinal,
- singleTodo,
 } from "../../redux/todo/TodoSlice";
 
 
 const TodoPageLoggedIn = () => {
 //redux
-const {todoLoadingError, todoLoading, error, currentTodos, refresh, currentSingleTodo  } = useAppSelector(
+const {todoLoadingError, todoLoading, currentTodos, refresh,   } = useAppSelector(
   (state) => state.todoDataInfo
 );
 const dispatch = useAppDispatch();
@@ -43,7 +42,7 @@ const dispatch = useAppDispatch();
 
         const todos = await TodoApi.fetchTodos();
 
-        dispatch(postLoad(todos))
+        dispatch(currentAllTodos(todos))
 
       } catch (error) {
         alert(error);
@@ -70,7 +69,7 @@ console.log ( " current todos from redux ", currentTodos)
         await TodoApi.deleteTodos(todo._id);
         // setNotes
 
-        dispatch(postLoad(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id)))
+        dispatch(currentAllTodos(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id)))
         // setTodos(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id));
       }
     } catch (error) {

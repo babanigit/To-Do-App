@@ -15,6 +15,9 @@ interface ITodoInfoState {
     todoLoadingError:boolean
     todoLoading:boolean
     error:IUserError | null
+
+    showAdd:boolean
+    showEdit:boolean
     
 }
 
@@ -31,6 +34,9 @@ const initialState: ITodoInfoState = {
     todoLoading: false,
 
     error: null ,
+
+    showAdd:false,
+    showEdit:false
 }
 
 export const todoInfoSlice = createSlice({
@@ -39,12 +45,14 @@ export const todoInfoSlice = createSlice({
     initialState,
     reducers: {
 
-        increment: (state) => {
-            state.value += 1
+        showAddRedux: (state, action: PayloadAction<boolean>) => {
+            state.showAdd =action.payload        
+          },
+
+        showEditRedux: (state,action: PayloadAction<boolean>) => {
+          state.showEdit =action.payload       
         },
-        decrement: (state) => {
-            state.value -= 1
-        },
+
         // Use the PayloadAction type to declare the contents of `action.payload`
         incrementByAmount: (state, action: PayloadAction<number>) => {
             state.value += action.payload
@@ -53,7 +61,6 @@ export const todoInfoSlice = createSlice({
         refereshTodo:(state,action: PayloadAction<ITodoModel | null>)=> {
           state.refresh = action.payload
         },
-
 
         singleTodo:(state,action: PayloadAction<ITodoModel>)=> {
           state.currentSingleTodo = action.payload
@@ -67,7 +74,7 @@ export const todoInfoSlice = createSlice({
             state.todoLoadingError = false;
             state.todoLoading=true;
           },
-          postLoad: (state, action: PayloadAction<ITodoModel[]>) => {
+          currentAllTodos: (state, action: PayloadAction<ITodoModel[]>) => {
             state.currentTodos = action.payload;
             // state.todoLoadingError = false;
             // state.todoLoading=true
@@ -116,24 +123,24 @@ export const todoInfoSlice = createSlice({
 
 
 
-
     },
 })
-
-export const { increment, decrement, incrementByAmount } = todoInfoSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.todoDataInfo.value
 
 export const {
   preLoad,
-  postLoad,
+  currentAllTodos,
   loadFail,
   loadFinal,
 
   singleTodo,
   getTodoIdRedux,
   refereshTodo,
+
+  showAddRedux,
+  showEditRedux,
 
   updateTodoFailed,
   updateTodoStart,

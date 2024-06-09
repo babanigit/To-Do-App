@@ -8,7 +8,7 @@ import { Card } from "react-bootstrap";
 import * as TodoApi from "../network/fetchApi";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { postLoad, refereshTodo, singleTodo } from "../../redux/todo/TodoSlice";
+import { refereshTodo, singleTodo } from "../../redux/todo/TodoSlice";
 import { useState } from "react";
 
 interface IProps {
@@ -22,16 +22,9 @@ interface IProps {
 
 const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
   //redux
-  const {
-    todoLoadingError,
-    todoLoading,
-    error,
-    currentTodos,
-    refresh,
-    currentSingleTodo,
-  } = useAppSelector((state) => state.todoDataInfo);
+  const { currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
 
-  const [trail, setTrail] = useState<ITodoModel |null >(null);
+  const [trail, setTrail] = useState<ITodoModel | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -46,7 +39,9 @@ const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
   }
 
   async function tickFun() {
+
     dispatch(singleTodo(todos));
+
     console.log(currentSingleTodo!);
     console.log(currentSingleTodo!._id);
 
@@ -64,12 +59,11 @@ const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
       });
     }
 
+    console.log(" the trial is ", trail)
 
-    await TodoApi.updateTodos(currentSingleTodo!._id, trail!);
+    // await TodoApi.updateTodos(currentSingleTodo!._id, trail!);
 
-    dispatch(refereshTodo(trail));
-
-
+    // dispatch(refereshTodo(trail));
   }
 
   return (

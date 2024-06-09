@@ -41,6 +41,7 @@ const Main = () => {
     async function fetchLoggedInUser() {
       try {
         dispatch(signInStart())
+        
         const user = await api.getLoggedInUser();
 
         console.log("logged in user :  ", user);
