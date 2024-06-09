@@ -4,7 +4,7 @@ import { ILoginCred, IRegisterCred, IUserError, IUserModel } from "../modal/user
 
 // const todoLink = "api/todos/";
 const userLink = "api/users/";
-const todoLink="api/todos/"
+const todoLink = "api/todos/"
 
 // fetcher.
 const fetchData = async (input: RequestInfo, init?: RequestInit) => {
@@ -13,12 +13,12 @@ const fetchData = async (input: RequestInfo, init?: RequestInit) => {
   if (res.ok) return res;
 
   else {
-    const errorBody:IUserError = await res.json();
+    const errorBody: IUserError = await res.json();
     const message = errorBody.message;
     throw new Error(
-            message
+      message
     );
-    
+
   }
 };
 
@@ -66,8 +66,8 @@ export const getLoginUser = async (
 };
 
 // get logout
-export async function getLogout(){
-  await fetchData(userLink+"logout",{method:"POST"});
+export async function getLogout() {
+  await fetchData(userLink + "logout", { method: "POST" });
 }
 
 // NOTOS
@@ -75,7 +75,16 @@ export async function getLogout(){
 // fetch notes
 export async function fetchTodos(): Promise<ITodoModel[]> {
   const res = await fetchData(todoLink, {
-      method: "GET",
+    method: "GET",
+  });
+  return await res.json();
+}
+
+// fetch notes
+export async function getTodo(  noteId: string,
+): Promise<ITodoModel[]> {
+  const res = await fetchData(todoLink + noteId, {
+    method: "GET",
   });
   return await res.json();
 }
@@ -83,11 +92,11 @@ export async function fetchTodos(): Promise<ITodoModel[]> {
 // to create note
 export async function createTodos(note: ITodoModel): Promise<ITodoModel> {
   const res = await fetchData(todoLink, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify(note),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(note),
   });
   return res.json();
 }
@@ -98,17 +107,34 @@ export async function updateTodos(
   note: ITodoModel
 ): Promise<ITodoModel> {
   const res = await fetchData(todoLink + noteId, {
-      method: "PATCH",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify(note),
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(note),
   });
 
   return res.json();
+}
+
+//tick todo
+export async function tickTodo(noteId: string,
+  note: ITodoModel): Promise<ITodoModel> {
+
+  const res = await fetchData(todoLink + noteId, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(note),
+  });
+
+  return res.json();
+
 }
 
 // delete note
 export async function deleteTodos(noteId: string) {
   await fetchData(todoLink + noteId, { method: "DELETE" });
 }
+

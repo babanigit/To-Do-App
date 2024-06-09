@@ -14,20 +14,19 @@ import {
  postLoad,
  loadFail,
  loadFinal,
+ singleTodo,
 } from "../../redux/todo/TodoSlice";
 
 
 const TodoPageLoggedIn = () => {
 //redux
-const {todoLoadingError, todoLoading, error, currentTodos  } = useAppSelector(
+const {todoLoadingError, todoLoading, error, currentTodos, refresh, currentSingleTodo  } = useAppSelector(
   (state) => state.todoDataInfo
 );
 const dispatch = useAppDispatch();
 
   const [todos, setTodos] = useState<ITodoModel[] >(currentTodos);
 
-  // const [showTodosLoading, setShowTodosLoading] = useState(true);
-  // const [showTodosLoadingError, setShowTodosLoadingError] = useState(false);
 
   const [showAddTodos, setShowAddTodos] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
@@ -41,6 +40,7 @@ const dispatch = useAppDispatch();
         // setShowTodosLoading(true);
 
         dispatch(preLoad())
+
         const todos = await TodoApi.fetchTodos();
 
         dispatch(postLoad(todos))
@@ -69,7 +69,9 @@ console.log ( " current todos from redux ", currentTodos)
       if(confirm){
         await TodoApi.deleteTodos(todo._id);
         // setNotes
-        setTodos(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id));
+
+        dispatch(postLoad(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id)))
+        // setTodos(currentTodos.filter((existingTodo) => existingTodo._id !== todo._id));
       }
     } catch (error) {
       console.error(error);
@@ -77,23 +79,24 @@ console.log ( " current todos from redux ", currentTodos)
     }
   }
 
+
+
   const todoGrid = ( 
     <Row 
     // xs={1} md={2} xl={3} className={`g-4  `}
     >
-      {currentTodos.map((todos) => (
-        <div className=" p-2" key={todos._id}>
+      {currentTodos.map((T) => (
+        
+        <div className=" p-2" key={T._id}>
           <Todo
-            todos={todos}
+            todos={T}
 
-            // setTodoToEdit={setTodoToEdit}
-            // todoToEdit={todoToEdit}
-
-            // className={styles.note}
-            ontodosClicked={setTodoToEdit}
+        
+            onTodosClicked={setTodoToEdit}
             onDeleteTodosClicked={deleteTodos}
           />
         </div>
+
       ))}
     </Row>
   );

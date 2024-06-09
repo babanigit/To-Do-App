@@ -17,6 +17,8 @@ const AddEditTodoDialog = ({
   onDismiss,
   onTodosSaved,
 }: IAddEditTodosProps) => {
+
+  //react hook form
   const {
     register,
     handleSubmit,
@@ -27,6 +29,7 @@ const AddEditTodoDialog = ({
       text: todosToEdit?.text || "",
     },
   });
+
 
   async function onSubmit(input: ITodoModel) {
     try {

@@ -4,15 +4,20 @@ import { FaEdit } from "react-icons/fa";
 import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
-import { useEffect, useState } from "react";
 
-// import * as noteApi from "../network/fetchApi";
+// import * as TodoApi from "../network/fetchApi";
+
+
+
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import {
+ singleTodo,
+} from "../../redux/todo/TodoSlice";
 
 interface IProps {
   todos: ITodoModel;
-  ontodosClicked: (todos: ITodoModel) => void;
+  onTodosClicked: (todos: ITodoModel) => void;
   onDeleteTodosClicked: (todos: ITodoModel) => void;
-  className?: string;
 
   // setTodoToEdit: (value: ITodoModel) => void;
   // todoToEdit: ITodoModel | null;
@@ -20,28 +25,19 @@ interface IProps {
 
 const Todo = ({
   todos,
-  ontodosClicked,
-  // className,
+  onTodosClicked,
   onDeleteTodosClicked,
-
-  // todoToEdit
-  // setTodoToEdit
 
 }: IProps) => {
 
-  const [todoTicked, setTodoTicked] = useState<boolean>(false);
+  //redux
+const {todoLoadingError, todoLoading, error, currentTodos , refresh, currentSingleTodo  } = useAppSelector(
+  (state) => state.todoDataInfo
+);
 
-  useEffect(() => {
-    async function clicked() {
-      console.log(todoTicked);
+const dispatch = useAppDispatch();
 
-      // await noteApi.updateTodos(todoToEdit._id, input);
-    }
-
-    clicked();
-  }, [todoTicked]);
-
-  const { title, text, createdAt, updatedAt } = todos;
+  const {  title, text, createdAt, updatedAt } = todos;
 
   let createdUpdatedText: string;
 
@@ -51,11 +47,19 @@ const Todo = ({
     createdUpdatedText = "created: " + FormatDate(createdAt);
   }
 
+
+  function tickFun() {
+    
+    dispatch(singleTodo(todos))
+    console.log(currentSingleTodo!)
+
+  }
+
   return (
     <>
       <Card
         // className={`${styles.noteCard} ${className}`}
-        onClick={() => setTodoTicked(!todoTicked)}
+        onClick={() => tickFun() }
       >
         <Card.Body
           //  className={` ${styles.cardBody}`}
@@ -70,7 +74,7 @@ const Todo = ({
             <Card.Text>{text}</Card.Text>
           </div>
           <div className=" grid justify-between">
-            <FaEdit onClick={() => ontodosClicked(todos)} />
+            <FaEdit onClick={() => onTodosClicked(todos)} />
 
             <MdDelete
               onClick={(e) => {

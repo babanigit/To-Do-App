@@ -6,8 +6,12 @@ import { IUserError } from '../../components/modal/userModal'
 // Define a type for the slice state
 interface ITodoInfoState {
     value: number
+    refresh: ITodoModel[]
 
+    currentSingleTodo: ITodoModel | []
     currentTodos : ITodoModel[] 
+    todoIdRedux : string
+
     todoLoadingError:boolean
     todoLoading:boolean
     error:IUserError | null
@@ -17,9 +21,12 @@ interface ITodoInfoState {
 // Define the initial state using that type
 const initialState: ITodoInfoState = {
     value: 0,
+    refresh: [],
 
-
+    currentSingleTodo: [],
     currentTodos:  [],
+    todoIdRedux: "",
+
     todoLoadingError: false,
     todoLoading: false,
 
@@ -44,11 +51,19 @@ export const todoInfoSlice = createSlice({
         },
 
 
+        singleTodo:(state,action: PayloadAction<ITodoModel>)=> {
+          state.currentSingleTodo = action.payload
+        },
+
+        getTodoIdRedux:(state,action: PayloadAction<string>)=> {
+          state.todoIdRedux=action.payload
+        },
+
         preLoad: (state) => {
             state.todoLoadingError = false;
             state.todoLoading=true;
           },
-          postLoad: (state, action) => {
+          postLoad: (state, action: PayloadAction<ITodoModel[]>) => {
             state.currentTodos = action.payload;
             // state.todoLoadingError = false;
             // state.todoLoading=true
@@ -111,6 +126,9 @@ export const {
   postLoad,
   loadFail,
   loadFinal,
+
+  singleTodo,
+  getTodoIdRedux,
 
   updateTodoFailed,
   updateTodoStart,

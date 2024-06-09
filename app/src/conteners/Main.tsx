@@ -27,7 +27,7 @@ const Main = () => {
 
     //redux
     const {
-      error,
+      // error,
       //  loading,
          currentUser 
         } = useAppSelector(
@@ -85,9 +85,9 @@ const Main = () => {
           </Routes>
         </Container>
 
-        <p className="text-red-500 mt-5">
+        {/* <p className="text-red-500 mt-5">
             {error && error.message}
-          </p>
+          </p> */}
        
 
         {showRegModel && <div> <RegisterModel onRegistrationSuccessful={() => {
