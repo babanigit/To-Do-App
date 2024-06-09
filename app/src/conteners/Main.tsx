@@ -19,11 +19,17 @@ import {
  signInFailure,
  signInStart
 } from "../redux/user/UserSlice";
+import { ThemeDataType } from "../assets/theme";
 
-const Main = () => {
+interface IThemeProps {
+  theme:ThemeDataType
+}
+
+const Main = ({theme}:IThemeProps) => {
   // const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
+
 
     //redux
     const {
@@ -72,6 +78,8 @@ const Main = () => {
             setShowLogModel(false);
           }}
           // onLogoutSuccessful={() => setLoggedInUser(null)}
+
+          theme={theme}
 
         />
 

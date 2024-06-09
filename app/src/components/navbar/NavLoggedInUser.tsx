@@ -6,10 +6,13 @@ import {
   
   signOut,
  } from "../../redux/user/UserSlice";
+import { ThemeDataType } from "../../assets/theme";
 
+interface IProps {
+  theme:ThemeDataType
+}
 
-
-const NavLoggedInUser = () => {
+const NavLoggedInUser = ({theme}:IProps) => {
    //redux
    const {currentUser } = useAppSelector(
     (state) => state.userDataInfo
@@ -32,12 +35,19 @@ const NavLoggedInUser = () => {
 
   return (
     <>
-     <Navbar.Text className="me-2">
+     <Navbar.Text
+           style={{background:theme.body, color:theme.text}}
+     className="me-2">
         signed in as: {currentUser!.username}
     </Navbar.Text>
+
+    <div>
     <button
     className=" border-2 px-3 rounded-xl"
     onClick={logout}>log out</button>
+
+    </div>
+   
     </>
   )
 }
