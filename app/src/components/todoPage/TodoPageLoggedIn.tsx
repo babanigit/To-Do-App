@@ -57,7 +57,7 @@ const dispatch = useAppDispatch();
     }
 
     loadTodos();
-  }, [showAddTodos, todoToEdit]);
+  }, [showAddTodos, todoToEdit, refresh]);
 
 console.log ( " current todos from redux ", currentTodos)
 

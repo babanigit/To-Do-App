@@ -5,14 +5,11 @@ import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
 
-// import * as TodoApi from "../network/fetchApi";
-
-
+import * as TodoApi from "../network/fetchApi";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import {
- singleTodo,
-} from "../../redux/todo/TodoSlice";
+import { postLoad, refereshTodo, singleTodo } from "../../redux/todo/TodoSlice";
+import { useState } from "react";
 
 interface IProps {
   todos: ITodoModel;
@@ -23,21 +20,22 @@ interface IProps {
   // todoToEdit: ITodoModel | null;
 }
 
-const Todo = ({
-  todos,
-  onTodosClicked,
-  onDeleteTodosClicked,
-
-}: IProps) => {
-
+const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
   //redux
-const {todoLoadingError, todoLoading, error, currentTodos , refresh, currentSingleTodo  } = useAppSelector(
-  (state) => state.todoDataInfo
-);
+  const {
+    todoLoadingError,
+    todoLoading,
+    error,
+    currentTodos,
+    refresh,
+    currentSingleTodo,
+  } = useAppSelector((state) => state.todoDataInfo);
 
-const dispatch = useAppDispatch();
+  const [trail, setTrail] = useState<ITodoModel |null >(null);
 
-  const {  title, text, createdAt, updatedAt } = todos;
+  const dispatch = useAppDispatch();
+
+  const { title, text, createdAt, updatedAt } = todos;
 
   let createdUpdatedText: string;
 
@@ -47,11 +45,30 @@ const dispatch = useAppDispatch();
     createdUpdatedText = "created: " + FormatDate(createdAt);
   }
 
+  async function tickFun() {
+    dispatch(singleTodo(todos));
+    console.log(currentSingleTodo!);
+    console.log(currentSingleTodo!._id);
 
-  function tickFun() {
-    
-    dispatch(singleTodo(todos))
-    console.log(currentSingleTodo!)
+    if (currentSingleTodo?.todoState == false) {
+      setTrail({
+        ...currentSingleTodo,
+        todoState: true,
+      });
+    }
+
+    if (currentSingleTodo?.todoState == true) {
+      setTrail({
+        ...currentSingleTodo,
+        todoState: false,
+      });
+    }
+
+
+    await TodoApi.updateTodos(currentSingleTodo!._id, trail!);
+
+    dispatch(refereshTodo(trail));
+
 
   }
 
@@ -59,7 +76,7 @@ const dispatch = useAppDispatch();
     <>
       <Card
         // className={`${styles.noteCard} ${className}`}
-        onClick={() => tickFun() }
+        onClick={() => tickFun()}
       >
         <Card.Body
           //  className={` ${styles.cardBody}`}

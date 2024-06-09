@@ -104,7 +104,7 @@ export async function createTodos(note: ITodoModel): Promise<ITodoModel> {
 // update notes
 export async function updateTodos(
   noteId: string,
-  note: ITodoModel
+  note: ITodoModel 
 ): Promise<ITodoModel> {
   const res = await fetchData(todoLink + noteId, {
     method: "PATCH",

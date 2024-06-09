@@ -6,9 +6,9 @@ import { IUserError } from '../../components/modal/userModal'
 // Define a type for the slice state
 interface ITodoInfoState {
     value: number
-    refresh: ITodoModel[]
+    refresh: ITodoModel |null
 
-    currentSingleTodo: ITodoModel | []
+    currentSingleTodo: ITodoModel | null
     currentTodos : ITodoModel[] 
     todoIdRedux : string
 
@@ -21,9 +21,9 @@ interface ITodoInfoState {
 // Define the initial state using that type
 const initialState: ITodoInfoState = {
     value: 0,
-    refresh: [],
+    refresh: null,
 
-    currentSingleTodo: [],
+    currentSingleTodo: null,
     currentTodos:  [],
     todoIdRedux: "",
 
@@ -48,6 +48,10 @@ export const todoInfoSlice = createSlice({
         // Use the PayloadAction type to declare the contents of `action.payload`
         incrementByAmount: (state, action: PayloadAction<number>) => {
             state.value += action.payload
+        },
+
+        refereshTodo:(state,action: PayloadAction<ITodoModel | null>)=> {
+          state.refresh = action.payload
         },
 
 
@@ -129,6 +133,7 @@ export const {
 
   singleTodo,
   getTodoIdRedux,
+  refereshTodo,
 
   updateTodoFailed,
   updateTodoStart,
