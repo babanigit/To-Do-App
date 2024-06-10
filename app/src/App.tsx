@@ -3,7 +3,7 @@
 import Main from "./conteners/Main";
 import { ThemeProvider } from "styled-components";
 import { themes } from "./assets/theme";
-import React, { useState, createContext } from "react";
+import  { useState, createContext } from "react";
 
 
 interface SetThemeContextType {

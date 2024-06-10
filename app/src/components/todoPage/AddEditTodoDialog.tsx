@@ -4,7 +4,7 @@ import { ITodoModel } from "../modal/todoModal";
 
 import * as noteApi from "../network/fetchApi";
 
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { ThemeDataType } from "../../assets/theme";
 
 interface IAddEditTodosProps {
