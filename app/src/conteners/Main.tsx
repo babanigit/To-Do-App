@@ -18,7 +18,7 @@ import {
   // loggedInUserRedux,
   // signInFailure,
   // signInStart,
-  fetchLoggedInUser
+  fetchLoggedInUser,
 } from "../redux/user/UserSlice";
 import { ThemeDataType } from "../assets/theme";
 
@@ -56,24 +56,22 @@ const Main = ({ theme }: IThemeProps) => {
     //     dispatch(signInFailure(error));
     //   }
     // }
-
     // fetchLoggedInUser();
 
-    dispatch(fetchLoggedInUser())
+    dispatch(fetchLoggedInUser());
   }, []);
 
   return (
     <div
-    className="min-h-screen h-auto"
-    style={{
-      backgroundColor: theme.body2,
-      color: theme.text,
-      borderColor: theme.text,
-    }}
+      className="min-h-screen h-auto"
+      style={{
+        backgroundColor: theme.body2,
+        color: theme.text,
+        borderColor: theme.text,
+      }}
     >
       <BrowserRouter>
         <Navbare
-          // loggedInUser={loggedInUser}
           onLoginClicked={() => {
             setShowLogModel(true);
             setShowRegModel(false);
@@ -82,8 +80,6 @@ const Main = ({ theme }: IThemeProps) => {
             setShowRegModel(true);
             setShowLogModel(false);
           }}
-          // onLogoutSuccessful={() => setLoggedInUser(null)}
-
           theme={theme}
         />
 
@@ -98,7 +94,6 @@ const Main = ({ theme }: IThemeProps) => {
               <RegisterModel
                 theme={theme}
                 onRegistrationSuccessful={() => {
-                  // setLoggedInUser(user);
                   setShowRegModel(false);
                 }}
               />{" "}
@@ -111,7 +106,6 @@ const Main = ({ theme }: IThemeProps) => {
               <LoginModel
                 theme={theme}
                 onLoginSuccessful={() => {
-                  // setLoggedInUser(user);
                   setShowLogModel(false);
                 }}
               />{" "}
@@ -119,17 +113,16 @@ const Main = ({ theme }: IThemeProps) => {
           )}
         </div>
 
-        { (!showLogModel && !showRegModel) && (
+        {!showLogModel && !showRegModel && (
           <Container>
-          <Routes>
-            <Route path="/" element={<TodoPage theme={theme} loggedInUser={currentUser} />} />
-          </Routes>
-        </Container>
-        )
-
-        }
-
-        
+            <Routes>
+              <Route
+                path="/"
+                element={<TodoPage theme={theme} loggedInUser={currentUser} />}
+              />
+            </Routes>
+          </Container>
+        )}
       </BrowserRouter>
     </div>
   );

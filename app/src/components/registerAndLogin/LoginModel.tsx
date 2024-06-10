@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IUserModel } from "../modal/userModal";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
@@ -14,7 +13,7 @@ import { ThemeDataType } from "../../assets/theme";
 
 interface LoginModelProps {
   // onDismiss: () => void;
-  onLoginSuccessful: (user: IUserModel) => void;
+  onLoginSuccessful: () => void;
   theme: ThemeDataType;
 }
 
@@ -53,7 +52,7 @@ const LoginModel = ({ onLoginSuccessful, theme }: LoginModelProps) => {
         dispatch(signInFailure(data));
         return;
       }
-      onLoginSuccessful(data);
+      onLoginSuccessful();
 
       dispatch(signInSuccess(data));
     } catch (error) {

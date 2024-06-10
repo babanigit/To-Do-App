@@ -48,7 +48,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
 
     dispatch(fetchTodo());
     
-  }, [showAddTodos, todoToEdit]);
+  }, [showAddTodos, todoToEdit,]);
 
   console.log(" current todos from redux ", currentTodos);
 

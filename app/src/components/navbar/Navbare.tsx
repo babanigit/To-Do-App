@@ -12,17 +12,13 @@ import { CiLight } from "react-icons/ci";
 import { MdDarkMode } from "react-icons/md";
 
 interface INavBarProps {
-  // loggedInUser: IUserModel | null;
   onRegisterClicked: () => void;
   onLoginClicked: () => void;
-  // onLogoutSuccessful: () => void;
 
   theme: ThemeDataType;
 }
 
 const Navbare = ({
-  // loggedInUser,
-  // onLogoutSuccessful,
 
   onLoginClicked,
   onRegisterClicked,
@@ -38,11 +34,9 @@ const Navbare = ({
   function changeTheme() {
     if (currTheme === "light") {
       setT("dark");
-      // localStorage.setItem("theme", "dark");
       setCurrTheme("dark");
     } else {
       setT("light");
-      // localStorage.setItem("theme", "light");
       setCurrTheme("light");
     }
   }
@@ -71,6 +65,7 @@ const Navbare = ({
               ) : (
                 <NavLogOut
                   theme={theme}
+
                   onLoginClicked={onLoginClicked}
                   onRegisterClicked={onRegisterClicked}
                 />

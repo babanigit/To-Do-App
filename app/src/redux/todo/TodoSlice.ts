@@ -17,6 +17,12 @@ export const fetchTodo = createAsyncThunk("fetchTodos", async () => {
   return todos;
 });
 
+export const deleteTodo = createAsyncThunk("deleteTodo", async (todoId:string) => {
+  const todoDelete= await API.deleteTodos(todoId);
+  return todoDelete;
+});
+
+
 // Define a type for the slice state
 interface ITodoInfoState {
   currentSingleTodo: ITodoModel | null;
@@ -28,6 +34,8 @@ interface ITodoInfoState {
 
   showAdd: boolean;
   showEdit: boolean;
+
+  refresh:boolean
 }
 
 // Define the initial state using that type
@@ -42,6 +50,8 @@ const initialState: ITodoInfoState = {
 
   showAdd: false,
   showEdit: false,
+  
+  refresh:false
 };
 
 // Define the fetchTodoRejected action creator with the payload type IUserError
@@ -57,6 +67,8 @@ export const todoInfoSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchtodoPending, (state, action) => {
       state.todoLoading = true;
+      state.todoLoadingError = false;
+
       state.currentTodos=action.payload;
     });
 
@@ -64,7 +76,6 @@ export const todoInfoSlice = createSlice({
       fetchTodo.fulfilled,
       (state, action: PayloadAction<ITodoModel[]|[]>) => {
         state.todoLoading = false;
-        state.todoLoadingError=false
         state.currentTodos = action.payload;
       }
     );

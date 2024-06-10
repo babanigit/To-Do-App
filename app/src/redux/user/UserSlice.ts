@@ -5,7 +5,7 @@ import { IUserError, IUserModel } from "../../components/modal/userModal";
 import * as API from "../../components/network/fetchApi";
 
 //actions
-export const fetchLoggedInUser = createAsyncThunk("fetchTodos", async () => {
+export const fetchLoggedInUser = createAsyncThunk("fetchLoggedInUser", async () => {
   const user = await API.getLoggedInUser();
   return user;
 });
@@ -47,13 +47,12 @@ export const UserDataSlice = createSlice({
       fetchLoggedInUser.fulfilled,
       (state, action: PayloadAction<IUserModel>) => {
         state.loading = false;
-        // state.todoLoadingError=false
         state.currentUser = action.payload;
       }
     );
 
     builder.addCase(fetchUserRejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.error = action.payload;
     });
   },

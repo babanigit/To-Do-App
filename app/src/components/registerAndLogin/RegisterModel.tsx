@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IUserModel } from "../modal/userModal";
+// import { IUserModel } from "../modal/userModal";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
@@ -12,7 +12,7 @@ import { ThemeDataType } from "../../assets/theme";
 
 interface RegisterModelProps {
   // onDismiss: () => void;
-  onRegistrationSuccessful: (user: IUserModel) => void;
+  onRegistrationSuccessful: (value:void) => void;
   theme: ThemeDataType;
 }
 
@@ -55,7 +55,7 @@ const RegisterModel = ({
         dispatch(signInFailure(data));
         return;
       }
-      onRegistrationSuccessful(data);
+      onRegistrationSuccessful();
 
       dispatch(signInSuccess(data));
     } catch (error) {

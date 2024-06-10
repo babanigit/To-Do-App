@@ -8,8 +8,9 @@ import { Card } from "react-bootstrap";
 
 import * as TodoApi from "../network/fetchApi";
 
-// import { useAppDispatch, useAppSelector } from "../../redux/hook";
-// import { currentAllTodos, singleTodo } from "../../redux/todo/TodoSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { deleteTodo } from "../../redux/todo/TodoSlice";
+
 import { useState } from "react";
 import { ThemeDataType } from "../../assets/theme";
 
@@ -30,8 +31,8 @@ const Todo = ({
   onTodosSaved,
 }: IProps) => {
   //redux
-  // const { currentTodos,currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
-  // const dispatch = useAppDispatch();
+  const { currentTodos,currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
+  const dispatch = useAppDispatch();
 
   const [trail, setTrail] = useState<ITodoModel>(todos);
 
@@ -103,9 +104,14 @@ const Todo = ({
               <FaEdit onClick={() => onTodosClicked(todos)} />
 
               <MdDelete
-                onClick={(e) => {
-                  onDeleteTodosClicked(todos);
+                onClick={async(e) => {
+                                    // onDeleteTodosClicked(todos);
+
                   e.stopPropagation();
+                  const confirm = window.confirm("are you sure?");
+                  if (confirm) dispatch(deleteTodo(todos._id))
+                  
+                  
                 }}
               />
             </div>
