@@ -1,14 +1,15 @@
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 
 import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
 
-// import * as TodoApi from "../network/fetchApi";
+import * as TodoApi from "../network/fetchApi";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { singleTodo } from "../../redux/todo/TodoSlice";
+// import { useAppDispatch, useAppSelector } from "../../redux/hook";
+// import { currentAllTodos, singleTodo } from "../../redux/todo/TodoSlice";
 import { useState } from "react";
 import { ThemeDataType } from "../../assets/theme";
 
@@ -18,7 +19,7 @@ interface IProps {
   onDeleteTodosClicked: (todos: ITodoModel) => void;
 
   theme: ThemeDataType;
-  
+  onTodosSaved: (todo: ITodoModel) => void;
 }
 
 const Todo = ({
@@ -26,13 +27,13 @@ const Todo = ({
   onTodosClicked,
   onDeleteTodosClicked,
   theme,
+  onTodosSaved,
 }: IProps) => {
   //redux
-  const { currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
+  // const { currentTodos,currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
+  // const dispatch = useAppDispatch();
 
-  const [trail, setTrail] = useState<ITodoModel | null>(null);
-
-  const dispatch = useAppDispatch();
+  const [trail, setTrail] = useState<ITodoModel>(todos);
 
   const { title, text, createdAt, updatedAt } = todos;
 
@@ -45,58 +46,71 @@ const Todo = ({
   }
 
   async function tickFun() {
-    dispatch(singleTodo(todos));
-
-    console.log(currentSingleTodo!);
-    console.log(currentSingleTodo!._id);
-
-    if (currentSingleTodo?.todoState == false) {
+    if (trail?.todoState === false) {
       setTrail({
-        ...currentSingleTodo,
+        ...trail,
         todoState: true,
       });
     }
 
-    if (currentSingleTodo?.todoState == true) {
+    if (trail?.todoState === true) {
       setTrail({
-        ...currentSingleTodo,
+        ...trail,
         todoState: false,
       });
     }
 
     console.log(" the trial is ", trail);
 
+    const hello = await TodoApi.updateTodos(trail._id, trail);
+
+    console.log(" the hello is ", hello);
+
+    onTodosSaved(hello);
   }
 
   return (
     <>
-      <Card onClick={() => tickFun()}>
+      <Card>
         <Card.Body
-          className=" flex justify-between rounded-lg"
+          onClick={() => tickFun()}
           style={{
             backgroundColor: theme.body,
             color: theme.text,
           }}
+          className=" flex justify-between rounded-lg"
         >
-          <div>
-            <Card.Title
-            >
-              {title}
-            </Card.Title>
+          <div className=" ">
+            <Card.Title>{title}</Card.Title>
             <Card.Text>{text}</Card.Text>
           </div>
-          <div className=" grid justify-between">
-            <FaEdit onClick={() => onTodosClicked(todos)} />
 
-            <MdDelete
-              onClick={(e) => {
-                onDeleteTodosClicked(todos);
-                e.stopPropagation();
-              }}
-            />
+          <div className=" flex gap-3 place-content-center place-items-center">
+            <div>
+              {todos.todoState && (
+                <>
+                  <TiTick size={53} />
+                </>
+              )}
+            </div>
           </div>
         </Card.Body>
-        <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
+        <Card.Footer className=" flex justify-between">
+          <div>{createdUpdatedText}</div>
+
+          <div>
+            <div className=" flex justify-between gap-3">
+              <FaEdit onClick={() => onTodosClicked(todos)} />
+
+              <MdDelete
+                onClick={(e) => {
+                  onDeleteTodosClicked(todos);
+                  e.stopPropagation();
+                }}
+              />
+            </div>
+          </div>
+        </Card.Footer>
       </Card>
     </>
   );

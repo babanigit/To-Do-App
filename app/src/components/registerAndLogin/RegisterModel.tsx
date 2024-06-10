@@ -71,7 +71,7 @@ const RegisterModel = ({
           color: theme.text,
           borderColor: theme.text,
         }}
-        className=" max-w-lg m-auto h-auto grid place-content-center rounded-xl "
+        className=" max-w-lg mt-3 m-auto h-auto grid place-content-center rounded-xl "
       >
         <div className="  max-w-lg mx-auto   w-screen grid gap-3 p-5 ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">

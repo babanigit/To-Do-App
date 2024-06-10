@@ -91,8 +91,7 @@ export const createTodo: RequestHandler<
 
     assertIsDefine("cookie", getCookieAuth);
 
-        if (!title) throw createHttpError(400, "todo must have a title");
-
+    if (!title) throw createHttpError(400, "todo must have a title");
 
     if (!process.env.SECRET)
       throw createHttpError(404, " undefined secret key ");

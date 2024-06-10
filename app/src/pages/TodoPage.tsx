@@ -17,8 +17,20 @@ const TodoPage = ({ loggedInUser,theme }: ITodoPageProps) => {
           </>
         ) : (
           <>
-            <div className=" flex justify-center place-content-center ">
-              Logging to get your Todo
+            <div className=" m-5 grid justify-center place-content-center gap-3 ">
+              <div>
+              Log In to get your Todo
+
+              </div>
+              <div>
+                
+              </div>
+              <div className=" font-extrabold">
+                <div>
+                note :-
+                </div>
+                tab the Todo for a Tick
+              </div>
             </div>
           </>
         )}

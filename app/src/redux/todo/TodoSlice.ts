@@ -70,6 +70,7 @@ export const todoInfoSlice = createSlice({
           state.todoIdRedux=action.payload
         },
 
+
         preLoad: (state) => {
             state.todoLoadingError = false;
             state.todoLoading=true;
@@ -94,7 +95,7 @@ export const todoInfoSlice = createSlice({
             state.todoLoading = true;
           },
           updateTodoSuccess: (state, action) => {
-            state.currentTodos = action.payload;
+            state.currentSingleTodo = action.payload;
             state.todoLoading = false;
             state.error = null;
           }, 
@@ -102,6 +103,7 @@ export const todoInfoSlice = createSlice({
             state.todoLoading = false;
             state.error = action.payload;
           },
+
           
           deleteUserStart: (state) => {
             state.todoLoading = true;

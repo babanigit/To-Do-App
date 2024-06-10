@@ -22,7 +22,7 @@ interface Iprops {
 
 const TodoPageLoggedIn = ({ theme }: Iprops) => {
   //redux
-  const { todoLoadingError, todoLoading, currentTodos, refresh } =
+  const { todoLoadingError, todoLoading, currentTodos } =
     useAppSelector((state) => state.todoDataInfo);
   const dispatch = useAppDispatch();
 
@@ -32,6 +32,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
 
   useEffect(() => {
+
     async function loadTodos() {
       try {
         dispatch(preLoad());
@@ -49,7 +50,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     }
 
     loadTodos();
-  }, [showAddTodos, todoToEdit, refresh]);
+  }, [showAddTodos, todoToEdit ]);
 
   console.log(" current todos from redux ", currentTodos);
 
@@ -57,6 +58,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   async function deleteTodos(todo: ITodoModel) {
     const confirm = window.confirm("are you sure?");
     try {
+      
       if (confirm) {
         await TodoApi.deleteTodos(todo._id);
 
@@ -83,6 +85,24 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
             todos={T}
             onTodosClicked={setTodoToEdit}
             onDeleteTodosClicked={deleteTodos}
+
+            onTodosSaved={(updateTodos) => {
+              // setTodos(
+              //   currentTodos.map((existingNote) =>
+              //     existingNote._id === updateTodos._id
+              //       ? updateTodos
+              //       : existingNote
+              //   )
+              // );
+
+              dispatch(currentAllTodos(currentTodos.map((existingNote) =>
+                existingNote._id === updateTodos._id
+                  ? updateTodos
+                  : existingNote
+              )))
+              setTodoToEdit(null);
+            }}
+            
           />
         </div>
       ))}

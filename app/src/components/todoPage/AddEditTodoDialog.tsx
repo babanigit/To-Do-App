@@ -7,12 +7,19 @@ import * as noteApi from "../network/fetchApi";
 import { Modal, Form } from "react-bootstrap";
 import { ThemeDataType } from "../../assets/theme";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import {
+  updateTodoFailed,
+  updateTodoStart,
+  updateTodoSuccess,
+} from "../../redux/todo/TodoSlice";
+
 interface IAddEditTodosProps {
   todosToEdit?: ITodoModel;
   onDismiss: () => void;
   onTodosSaved: (todo: ITodoModel) => void;
 
-  theme:ThemeDataType;
+  theme: ThemeDataType;
 }
 
 const AddEditTodoDialog = ({
@@ -21,6 +28,10 @@ const AddEditTodoDialog = ({
   onDismiss,
   onTodosSaved,
 }: IAddEditTodosProps) => {
+  //redux
+  const { error } = useAppSelector((state) => state.todoDataInfo);
+
+  const dispatch = useAppDispatch();
 
   //react hook form
   const {
@@ -34,11 +45,11 @@ const AddEditTodoDialog = ({
     },
   });
 
-
   async function onSubmit(input: ITodoModel) {
     try {
       let todosResponse: ITodoModel;
 
+      dispatch(updateTodoStart());
       console.log(todosToEdit);
       // fetching add or edit notes
       if (todosToEdit) {
@@ -47,30 +58,35 @@ const AddEditTodoDialog = ({
         todosResponse = await noteApi.createTodos(input);
       }
 
+      dispatch(updateTodoSuccess(todosResponse));
       // const noteRes = await noteApi.createNote(input);
       onTodosSaved(todosResponse);
     } catch (error) {
+      dispatch(updateTodoFailed(error));
       console.error(error);
       alert(error);
     }
+
+    console.log(" todo error ", error)
   }
 
   return (
     <>
-      <Modal
-      
-      show onHide={onDismiss}>
-        <Modal.Header closeButton>
+      <Modal show onHide={onDismiss}>
+        <Modal.Header
+         
+          closeButton
+        >
           <Modal.Title>{todosToEdit ? "edit Todo" : "add Todo"}</Modal.Title>
+          {error && error.message}
         </Modal.Header>
 
         <Modal.Body
-        className=" rounded-lg"
-         style={{
-          backgroundColor: theme.body,
-          color: theme.text,
-          borderColor: theme.text,
-        }}
+          className=" rounded-lg m-1"
+          style={{
+            backgroundColor: theme.body,
+            color: theme.text,
+          }}
         >
           <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
             <TextInputField
@@ -93,15 +109,24 @@ const AddEditTodoDialog = ({
             />
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer
+        //  style={{
+        //   backgroundColor: theme.body2,
+        //   color: theme.text,
+        //   borderColor: theme.text,
+        // }}
+        >
           <button
-           style={{
-            backgroundColor: theme.text,
-            color: theme.body,
-            borderColor: theme.body,
-          }}
-          className=" border-2 px-3 rounded-lg"
-          type="submit" form="addEditNoteForm" disabled={isSubmitting}>
+            style={{
+              backgroundColor: theme.text,
+              color: theme.body,
+              borderColor: theme.body,
+            }}
+            className=" border-2 px-3 rounded-lg"
+            type="submit"
+            form="addEditNoteForm"
+            disabled={isSubmitting}
+          >
             save
           </button>
         </Modal.Footer>

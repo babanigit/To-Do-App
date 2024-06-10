@@ -88,7 +88,7 @@ const Main = ({ theme }: IThemeProps) => {
             {error && error.message}
           </p> */}
 
-        <div className=" p-4">
+        <div className="  ">
           {showRegModel && (
             <div>
               {" "}
@@ -116,11 +116,17 @@ const Main = ({ theme }: IThemeProps) => {
           )}
         </div>
 
-        <Container>
+        { (!showLogModel && !showRegModel) && (
+          <Container>
           <Routes>
             <Route path="/" element={<TodoPage theme={theme} loggedInUser={currentUser} />} />
           </Routes>
         </Container>
+        )
+
+        }
+
+        
       </BrowserRouter>
     </div>
   );
