@@ -29,7 +29,7 @@ const TodoPage = ({ loggedInUser,theme }: ITodoPageProps) => {
                 <div>
                 note :-
                 </div>
-                tab the Todo for a Tick
+                Tap the Todo for a Tick
               </div>
             </div>
           </>
