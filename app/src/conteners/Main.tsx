@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import * as api from "../components/network/fetchApi";
+// import * as api from "../components/network/fetchApi";
 
 // import { IUserModel } from "../components/modal/userModal";
 
@@ -15,9 +15,10 @@ import LoginModel from "../components/registerAndLogin/LoginModel";
 //redux
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
-  loggedInUserRedux,
-  signInFailure,
-  signInStart,
+  // loggedInUserRedux,
+  // signInFailure,
+  // signInStart,
+  fetchLoggedInUser
 } from "../redux/user/UserSlice";
 import { ThemeDataType } from "../assets/theme";
 
@@ -40,23 +41,25 @@ const Main = ({ theme }: IThemeProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    async function fetchLoggedInUser() {
-      try {
-        dispatch(signInStart());
+    // async function fetchLoggedInUser() {
+    //   try {
+    //     dispatch(signInStart());
 
-        const user = await api.getLoggedInUser();
+    //     const user = await api.getLoggedInUser();
 
-        console.log("logged in user :  ", user);
+    //     console.log("logged in user :  ", user);
 
-        dispatch(loggedInUserRedux(user));
-        // setLoggedInUser(user);
-      } catch (error) {
-        console.log(error);
-        dispatch(signInFailure(error));
-      }
-    }
+    //     dispatch(loggedInUserRedux(user));
+    //     // setLoggedInUser(user);
+    //   } catch (error) {
+    //     console.log(error);
+    //     dispatch(signInFailure(error));
+    //   }
+    // }
 
-    fetchLoggedInUser();
+    // fetchLoggedInUser();
+
+    dispatch(fetchLoggedInUser())
   }, []);
 
   return (

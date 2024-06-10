@@ -8,12 +8,7 @@ import Todo from "./Todo";
 import * as TodoApi from "../network/fetchApi";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import {
-  preLoad,
-  currentAllTodos,
-  loadFail,
-  loadFinal,
-} from "../../redux/todo/TodoSlice";
+import { currentAllTodos, fetchTodo } from "../../redux/todo/TodoSlice";
 import { ThemeDataType } from "../../assets/theme";
 
 interface Iprops {
@@ -22,8 +17,9 @@ interface Iprops {
 
 const TodoPageLoggedIn = ({ theme }: Iprops) => {
   //redux
-  const { todoLoadingError, todoLoading, currentTodos } =
-    useAppSelector((state) => state.todoDataInfo);
+  const { todoLoadingError, todoLoading, currentTodos } = useAppSelector(
+    (state) => state.todoDataInfo
+  );
   const dispatch = useAppDispatch();
 
   const [todos, setTodos] = useState<ITodoModel[]>(currentTodos);
@@ -32,25 +28,27 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
 
   useEffect(() => {
+    // async function loadTodos() {
+    //   try {
+    //     dispatch(preLoad());
 
-    async function loadTodos() {
-      try {
-        dispatch(preLoad());
+    //     const todos = await TodoApi.fetchTodos();
 
-        const todos = await TodoApi.fetchTodos();
+    //     dispatch(currentAllTodos(todos));
+    //   } catch (error) {
+    //     alert(error);
 
-        dispatch(currentAllTodos(todos));
-      } catch (error) {
-        alert(error);
+    //     dispatch(loadFail(error));
+    //   } finally {
+    //     dispatch(loadFinal());
+    //   }
+    // }
 
-        dispatch(loadFail(error));
-      } finally {
-        dispatch(loadFinal());
-      }
-    }
+    // loadTodos();
 
-    loadTodos();
-  }, [showAddTodos, todoToEdit ]);
+    dispatch(fetchTodo());
+    
+  }, [showAddTodos, todoToEdit]);
 
   console.log(" current todos from redux ", currentTodos);
 
@@ -58,7 +56,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   async function deleteTodos(todo: ITodoModel) {
     const confirm = window.confirm("are you sure?");
     try {
-      
+
       if (confirm) {
         await TodoApi.deleteTodos(todo._id);
 
@@ -68,7 +66,9 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
           )
         );
       }
+
     } catch (error) {
+
       console.error(error);
       alert(error);
     }
@@ -80,30 +80,26 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     >
       {currentTodos.map((T) => (
         <div className=" p-2" key={T._id}>
+
           <Todo
-          theme={theme}
+            theme={theme}
             todos={T}
             onTodosClicked={setTodoToEdit}
             onDeleteTodosClicked={deleteTodos}
-
             onTodosSaved={(updateTodos) => {
-              // setTodos(
-              //   currentTodos.map((existingNote) =>
-              //     existingNote._id === updateTodos._id
-              //       ? updateTodos
-              //       : existingNote
-              //   )
-              // );
-
-              dispatch(currentAllTodos(currentTodos.map((existingNote) =>
-                existingNote._id === updateTodos._id
-                  ? updateTodos
-                  : existingNote
-              )))
+              dispatch(
+                currentAllTodos(
+                  currentTodos.map((existingNote) =>
+                    existingNote._id === updateTodos._id
+                      ? updateTodos
+                      : existingNote
+                  )
+                )
+              );
               setTodoToEdit(null);
             }}
-            
           />
+
         </div>
       ))}
     </Row>
@@ -154,7 +150,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
       {/* to add */}
       {showAddTodos && (
         <AddEditTodoDialog
-        theme={theme}
+          theme={theme}
           onDismiss={() => setShowAddTodos(false)}
           onTodosSaved={(newTodos: ITodoModel) => {
             setTodos([...todos, newTodos]);
@@ -166,7 +162,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
       {/* to edit */}
       {todoToEdit && (
         <AddEditTodoDialog
-        theme={theme}
+          theme={theme}
           todosToEdit={todoToEdit}
           onDismiss={() => setTodoToEdit(null)}
           onTodosSaved={(updateTodos) => {

@@ -1,6 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../redux/store";
 import { IUserError, IUserModel } from "../../components/modal/userModal";
+
+import * as API from "../../components/network/fetchApi";
+
+//actions
+export const fetchLoggedInUser = createAsyncThunk("fetchTodos", async () => {
+  const user = await API.getLoggedInUser();
+  return user;
+});
 
 // Define a type for the slice state
 interface IUserDataState {
@@ -18,10 +26,38 @@ const initialState: IUserDataState = {
   error: null,
 };
 
+// Define the fetchUserRejected action creator with the payload type IUserError
+const fetchUserRejected = createAction<IUserError | null>("fetchLoggedInUser/rejected");
+
+const fetchUserPending = createAction<IUserModel | null>("fetchLoggedInUser/pending");
+
 export const UserDataSlice = createSlice({
   name: "userDataInfo",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
+
+  extraReducers: (builder) => {
+
+    builder.addCase(fetchUserPending, (state, action ) => {
+      state.loading = true;
+      state.currentUser =action.payload;
+    });
+
+    builder.addCase(
+      fetchLoggedInUser.fulfilled,
+      (state, action: PayloadAction<IUserModel>) => {
+        state.loading = false;
+        // state.todoLoadingError=false
+        state.currentUser = action.payload;
+      }
+    );
+
+    builder.addCase(fetchUserRejected, (state, action) => {
+      state.loading = true;
+      state.error = action.payload;
+    });
+  },
+
   reducers: {
    
     loggedInUserRedux: (state, action: PayloadAction<IUserModel | null>) => {
@@ -54,13 +90,6 @@ export const {
   signInStart,
   signInSuccess,
   signInFailure,
-
-  // updateUserFailure,
-  // updateUserStart,
-  // updateUserSuccess,
-  // deleteUserFailure,
-  // deleteUserStart,
-  // deleteUserSuccess,
 
   signOut,
   loggedInUserRedux,

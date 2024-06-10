@@ -1,26 +1,37 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store'
-import { ITodoModel } from '../../components/modal/todoModal'
-import { IUserError } from '../../components/modal/userModal'
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  createAction,
+} from "@reduxjs/toolkit";
+
+import type { RootState } from "../store";
+import { ITodoModel } from "../../components/modal/todoModal";
+import { IUserError } from "../../components/modal/userModal";
+
+import * as API from "../../components/network/fetchApi";
+
+//actions
+export const fetchTodo = createAsyncThunk("fetchTodos", async () => {
+  const todos = await API.fetchTodos();
+  return todos;
+});
 
 // Define a type for the slice state
 interface ITodoInfoState {
+  currentSingleTodo: ITodoModel | null;
+  currentTodos: ITodoModel[];
 
-  currentSingleTodo: ITodoModel | null
-  currentTodos: ITodoModel[]
+  todoLoadingError: boolean;
+  todoLoading: boolean;
+  error: IUserError | null;
 
-  todoLoadingError: boolean
-  todoLoading: boolean
-  error: IUserError | null
-
-  showAdd: boolean
-  showEdit: boolean
-
+  showAdd: boolean;
+  showEdit: boolean;
 }
 
 // Define the initial state using that type
 const initialState: ITodoInfoState = {
-
   currentSingleTodo: null,
   currentTodos: [],
 
@@ -30,29 +41,54 @@ const initialState: ITodoInfoState = {
   error: null,
 
   showAdd: false,
-  showEdit: false
-}
+  showEdit: false,
+};
+
+// Define the fetchTodoRejected action creator with the payload type IUserError
+const fetchTodoRejected = createAction<IUserError | null>("fetchTodo/rejected");
+
+const fetchtodoPending = createAction<ITodoModel[] | []>("fetchTodo/pending");
 
 export const todoInfoSlice = createSlice({
-  name: 'todoInfo',
+  name: "todoInfo",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {
 
+  extraReducers: (builder) => {
+    builder.addCase(fetchtodoPending, (state, action) => {
+      state.todoLoading = true;
+      state.currentTodos=action.payload;
+    });
+
+    builder.addCase(
+      fetchTodo.fulfilled,
+      (state, action: PayloadAction<ITodoModel[]|[]>) => {
+        state.todoLoading = false;
+        state.todoLoadingError=false
+        state.currentTodos = action.payload;
+      }
+    );
+
+    builder.addCase(fetchTodoRejected, (state, action) => {
+      state.todoLoadingError = true;
+      state.error = action.payload;
+    });
+  },
+
+
+
+  reducers: {
     showAddRedux: (state, action: PayloadAction<boolean>) => {
-      state.showAdd = action.payload
+      state.showAdd = action.payload;
     },
 
     showEditRedux: (state, action: PayloadAction<boolean>) => {
-      state.showEdit = action.payload
+      state.showEdit = action.payload;
     },
-
-
 
     singleTodo: (state, action: PayloadAction<ITodoModel>) => {
-      state.currentSingleTodo = action.payload
+      state.currentSingleTodo = action.payload;
     },
-
 
     preLoad: (state) => {
       state.todoLoadingError = false;
@@ -70,9 +106,8 @@ export const todoInfoSlice = createSlice({
     },
 
     loadFinal: (state) => {
-      state.todoLoading = false
+      state.todoLoading = false;
     },
-
 
     updateTodoStart: (state) => {
       state.todoLoading = true;
@@ -86,12 +121,12 @@ export const todoInfoSlice = createSlice({
       state.todoLoading = false;
       state.error = action.payload;
     },
-
   },
-})
+});
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.todoDataInfo.currentTodos
+export const selectCount = (state: RootState) =>
+  state.todoDataInfo.currentTodos;
 
 export const {
   preLoad,
@@ -106,8 +141,6 @@ export const {
   updateTodoFailed,
   updateTodoStart,
   updateTodoSuccess,
-
 } = todoInfoSlice.actions;
 
-
-export default todoInfoSlice.reducer
+export default todoInfoSlice.reducer;
