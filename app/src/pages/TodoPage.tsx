@@ -1,22 +1,24 @@
+import { ThemeDataType } from "../assets/theme";
 import { IUserModel } from "../components/modal/userModal";
 import TodoPageLoggedIn from "../components/todoPage/TodoPageLoggedIn";
 
 export interface ITodoPageProps {
   loggedInUser: IUserModel | null;
+  theme: ThemeDataType;
 }
 
-const TodoPage = ({ loggedInUser }: ITodoPageProps) => {
+const TodoPage = ({ loggedInUser,theme }: ITodoPageProps) => {
   return (
     <>
       <div>
         {loggedInUser ? (
           <>
-            <TodoPageLoggedIn />
+            <TodoPageLoggedIn theme={theme} />
           </>
         ) : (
           <>
             <div className=" flex justify-center place-content-center ">
-              You are not logged in.
+              Logging to get your Todo
             </div>
           </>
         )}

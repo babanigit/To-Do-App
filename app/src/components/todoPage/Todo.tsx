@@ -5,22 +5,28 @@ import { FormatDate } from "../../utils/FormateDates";
 import { ITodoModel } from "../modal/todoModal";
 import { Card } from "react-bootstrap";
 
-import * as TodoApi from "../network/fetchApi";
+// import * as TodoApi from "../network/fetchApi";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { refereshTodo, singleTodo } from "../../redux/todo/TodoSlice";
+import { singleTodo } from "../../redux/todo/TodoSlice";
 import { useState } from "react";
+import { ThemeDataType } from "../../assets/theme";
 
 interface IProps {
   todos: ITodoModel;
   onTodosClicked: (todos: ITodoModel) => void;
   onDeleteTodosClicked: (todos: ITodoModel) => void;
 
-  // setTodoToEdit: (value: ITodoModel) => void;
-  // todoToEdit: ITodoModel | null;
+  theme: ThemeDataType;
+  
 }
 
-const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
+const Todo = ({
+  todos,
+  onTodosClicked,
+  onDeleteTodosClicked,
+  theme,
+}: IProps) => {
   //redux
   const { currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
 
@@ -39,7 +45,6 @@ const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
   }
 
   async function tickFun() {
-
     dispatch(singleTodo(todos));
 
     console.log(currentSingleTodo!);
@@ -59,26 +64,22 @@ const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
       });
     }
 
-    console.log(" the trial is ", trail)
+    console.log(" the trial is ", trail);
 
-    // await TodoApi.updateTodos(currentSingleTodo!._id, trail!);
-
-    // dispatch(refereshTodo(trail));
   }
 
   return (
     <>
-      <Card
-        // className={`${styles.noteCard} ${className}`}
-        onClick={() => tickFun()}
-      >
+      <Card onClick={() => tickFun()}>
         <Card.Body
-          //  className={` ${styles.cardBody}`}
-          className=" flex justify-between"
+          className=" flex justify-between rounded-lg"
+          style={{
+            backgroundColor: theme.body,
+            color: theme.text,
+          }}
         >
           <div>
             <Card.Title
-            // className={`bg-red-200 rounded-md ${styleUtils.flexCenter} `}
             >
               {title}
             </Card.Title>
@@ -92,7 +93,6 @@ const Todo = ({ todos, onTodosClicked, onDeleteTodosClicked }: IProps) => {
                 onDeleteTodosClicked(todos);
                 e.stopPropagation();
               }}
-              className="text-muted ms-auto"
             />
           </div>
         </Card.Body>

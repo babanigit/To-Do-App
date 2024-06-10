@@ -5,21 +5,31 @@ export interface ThemeDataType {
     body: string;
     text: string;
     bg1: number;
+
+    body2: string;
+
     // dark?: string; // Optional property
 }
 
 const lightTheme: ThemeDataType = {
     name: "light",
-    body: "#D8D8D8",
+    body: "#ECECEC",
     text: "#373737",
-    bg1: 1
+    bg1: 1,
+
+    body2: "#D2D2D2",
+
 };
 
 const darkTheme: ThemeDataType = {
     name: "dark",
-    body: "#373737",
+    // 242424
+    body: "#242424",
     text: "#D8D8D8",
-    bg1: 50
+    bg1: 50,
+
+    body2: "#373737",
+
 };
 
 export const themes: { [key: string]: ThemeDataType } = {

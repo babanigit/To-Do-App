@@ -5,14 +5,18 @@ import { ITodoModel } from "../modal/todoModal";
 import * as noteApi from "../network/fetchApi";
 
 import { Modal, Form, Button } from "react-bootstrap";
+import { ThemeDataType } from "../../assets/theme";
 
 interface IAddEditTodosProps {
   todosToEdit?: ITodoModel;
   onDismiss: () => void;
   onTodosSaved: (todo: ITodoModel) => void;
+
+  theme:ThemeDataType;
 }
 
 const AddEditTodoDialog = ({
+  theme,
   todosToEdit,
   onDismiss,
   onTodosSaved,
@@ -53,12 +57,21 @@ const AddEditTodoDialog = ({
 
   return (
     <>
-      <Modal show onHide={onDismiss}>
+      <Modal
+      
+      show onHide={onDismiss}>
         <Modal.Header closeButton>
-          <Modal.Title>{todosToEdit ? "edit note" : "add note"}</Modal.Title>
+          <Modal.Title>{todosToEdit ? "edit Todo" : "add Todo"}</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body
+        className=" rounded-lg"
+         style={{
+          backgroundColor: theme.body,
+          color: theme.text,
+          borderColor: theme.text,
+        }}
+        >
           <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
             <TextInputField
               name="title"
@@ -81,9 +94,16 @@ const AddEditTodoDialog = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit" form="addEditNoteForm" disabled={isSubmitting}>
+          <button
+           style={{
+            backgroundColor: theme.text,
+            color: theme.body,
+            borderColor: theme.body,
+          }}
+          className=" border-2 px-3 rounded-lg"
+          type="submit" form="addEditNoteForm" disabled={isSubmitting}>
             save
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </>

@@ -15,49 +15,44 @@ import LoginModel from "../components/registerAndLogin/LoginModel";
 //redux
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
- loggedInUserRedux,
- signInFailure,
- signInStart
+  loggedInUserRedux,
+  signInFailure,
+  signInStart,
 } from "../redux/user/UserSlice";
 import { ThemeDataType } from "../assets/theme";
 
 interface IThemeProps {
-  theme:ThemeDataType
+  theme: ThemeDataType;
 }
 
-const Main = ({theme}:IThemeProps) => {
+const Main = ({ theme }: IThemeProps) => {
   // const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
+  //redux
+  const {
+    // error,
+    //  loading,
+    currentUser,
+  } = useAppSelector((state) => state.userDataInfo);
 
-    //redux
-    const {
-      // error,
-      //  loading,
-         currentUser 
-        } = useAppSelector(
-      (state) => state.userDataInfo
-    );
+  const dispatch = useAppDispatch();
 
-    const dispatch = useAppDispatch();
-
-    
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
-        dispatch(signInStart())
-        
+        dispatch(signInStart());
+
         const user = await api.getLoggedInUser();
 
         console.log("logged in user :  ", user);
 
-        dispatch(loggedInUserRedux(user))
+        dispatch(loggedInUserRedux(user));
         // setLoggedInUser(user);
-
       } catch (error) {
-        console.log(error)
-        dispatch(signInFailure(error))
+        console.log(error);
+        dispatch(signInFailure(error));
       }
     }
 
@@ -65,7 +60,14 @@ const Main = ({theme}:IThemeProps) => {
   }, []);
 
   return (
-    <>
+    <div
+    className="min-h-screen h-auto"
+    style={{
+      backgroundColor: theme.body2,
+      color: theme.text,
+      borderColor: theme.text,
+    }}
+    >
       <BrowserRouter>
         <Navbare
           // loggedInUser={loggedInUser}
@@ -80,38 +82,47 @@ const Main = ({theme}:IThemeProps) => {
           // onLogoutSuccessful={() => setLoggedInUser(null)}
 
           theme={theme}
-
         />
-
-        <Container>
-          <Routes>
-            <Route
-              path="/"
-              element={<TodoPage
-                 loggedInUser={currentUser} 
-                 />}
-            />
-          </Routes>
-        </Container>
 
         {/* <p className="text-red-500 mt-5">
             {error && error.message}
           </p> */}
-       
 
-        {showRegModel && <div> <RegisterModel theme={theme} onRegistrationSuccessful={() => {
-            // setLoggedInUser(user);
-            setShowRegModel(false);
-          }}/> </div>}
+        <div className=" p-4">
+          {showRegModel && (
+            <div>
+              {" "}
+              <RegisterModel
+                theme={theme}
+                onRegistrationSuccessful={() => {
+                  // setLoggedInUser(user);
+                  setShowRegModel(false);
+                }}
+              />{" "}
+            </div>
+          )}
 
-        {showLogModel && <div> <LoginModel  theme={theme}   onLoginSuccessful={() => {
-            // setLoggedInUser(user);
-            setShowLogModel(false);
-          }}/> </div>}
+          {showLogModel && (
+            <div>
+              {" "}
+              <LoginModel
+                theme={theme}
+                onLoginSuccessful={() => {
+                  // setLoggedInUser(user);
+                  setShowLogModel(false);
+                }}
+              />{" "}
+            </div>
+          )}
+        </div>
 
-
+        <Container>
+          <Routes>
+            <Route path="/" element={<TodoPage theme={theme} loggedInUser={currentUser} />} />
+          </Routes>
+        </Container>
       </BrowserRouter>
-    </>
+    </div>
   );
 };
 
