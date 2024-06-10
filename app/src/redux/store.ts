@@ -1,12 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counter/counterSlice'
 import TodoDataReducer from "./todo/TodoSlice"
 import  UserDataReducer  from './user/UserSlice'
 
 const store = configureStore({
     reducer: {
-
-        counter: counterReducer,
 
         todoDataInfo: TodoDataReducer,
 
