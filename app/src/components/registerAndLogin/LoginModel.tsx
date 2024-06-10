@@ -10,13 +10,15 @@ import {
 } from "../../redux/user/UserSlice";
 
 import { Spinner } from "react-bootstrap";
+import { ThemeDataType } from "../../assets/theme";
 
 interface LoginModelProps {
   // onDismiss: () => void;
   onLoginSuccessful: (user: IUserModel) => void;
+  theme:ThemeDataType
 }
 
-const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
+const LoginModel = ({ onLoginSuccessful,theme }: LoginModelProps) => {
   const [formData, setFormData] = useState({});
 
   //redux
@@ -63,8 +65,8 @@ const LoginModel = ({ onLoginSuccessful }: LoginModelProps) => {
   return (
     <>
       <div
-        // style={{ background: props.theme.body, color: props.theme.text }}
-        className=" max-w-lg m-auto h-screen grid place-content-center "
+                style={{background:theme.body, color:theme.text ,borderColor:theme.text}}
+      className=" max-w-lg m-auto h-auto grid place-content-center  "
       >
         <div className="  max-w-lg mx-auto   w-screen grid gap-3 p-5 ">
           <div className=" flex place-content-center place-items-center">

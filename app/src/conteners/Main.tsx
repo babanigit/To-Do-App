@@ -99,12 +99,12 @@ const Main = ({theme}:IThemeProps) => {
           </p> */}
        
 
-        {showRegModel && <div> <RegisterModel onRegistrationSuccessful={() => {
+        {showRegModel && <div> <RegisterModel theme={theme} onRegistrationSuccessful={() => {
             // setLoggedInUser(user);
             setShowRegModel(false);
           }}/> </div>}
 
-        {showLogModel && <div> <LoginModel  onLoginSuccessful={() => {
+        {showLogModel && <div> <LoginModel  theme={theme}   onLoginSuccessful={() => {
             // setLoggedInUser(user);
             setShowLogModel(false);
           }}/> </div>}
