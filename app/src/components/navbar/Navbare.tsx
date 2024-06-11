@@ -1,6 +1,6 @@
 import { Container, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-// import { IUserModel } from "../modal/userModal";
+
 import NavLoggedInUser from "./NavLoggedInUser";
 import NavLogOut from "./NavLogOut";
 import { useAppSelector } from "../../redux/hook";
@@ -19,7 +19,6 @@ interface INavBarProps {
 }
 
 const Navbare = ({
-
   onLoginClicked,
   onRegisterClicked,
 
@@ -65,7 +64,6 @@ const Navbare = ({
               ) : (
                 <NavLogOut
                   theme={theme}
-
                   onLoginClicked={onLoginClicked}
                   onRegisterClicked={onRegisterClicked}
                 />

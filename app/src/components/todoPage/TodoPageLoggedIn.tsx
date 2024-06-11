@@ -28,27 +28,8 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
 
   useEffect(() => {
-    // async function loadTodos() {
-    //   try {
-    //     dispatch(preLoad());
-
-    //     const todos = await TodoApi.fetchTodos();
-
-    //     dispatch(currentAllTodos(todos));
-    //   } catch (error) {
-    //     alert(error);
-
-    //     dispatch(loadFail(error));
-    //   } finally {
-    //     dispatch(loadFinal());
-    //   }
-    // }
-
-    // loadTodos();
-
     dispatch(fetchTodo());
-    
-  }, [showAddTodos, todoToEdit,]);
+  }, [showAddTodos, todoToEdit]);
 
   console.log(" current todos from redux ", currentTodos);
 
@@ -56,7 +37,6 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   async function deleteTodos(todo: ITodoModel) {
     const confirm = window.confirm("are you sure?");
     try {
-
       if (confirm) {
         await TodoApi.deleteTodos(todo._id);
 
@@ -66,9 +46,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
           )
         );
       }
-
     } catch (error) {
-
       console.error(error);
       alert(error);
     }
@@ -80,7 +58,6 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     >
       {currentTodos.map((T) => (
         <div className=" p-2" key={T._id}>
-
           <Todo
             theme={theme}
             todos={T}
@@ -99,7 +76,6 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
               setTodoToEdit(null);
             }}
           />
-
         </div>
       ))}
     </Row>
@@ -142,7 +118,10 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
           {currentTodos.length > 0 ? (
             todoGrid
           ) : (
-            <p>you don't have any todos yet</p>
+            <p>
+              You don't have any Todo yet, click on + icon to Add your first
+              Todo
+            </p>
           )}
         </>
       )}

@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import * as api from "../components/network/fetchApi";
 
-// import { IUserModel } from "../components/modal/userModal";
 
 import Navbare from "../components/navbar/Navbare";
 import { Container } from "react-bootstrap";
@@ -15,9 +13,7 @@ import LoginModel from "../components/registerAndLogin/LoginModel";
 //redux
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
-  // loggedInUserRedux,
-  // signInFailure,
-  // signInStart,
+ 
   fetchLoggedInUser,
 } from "../redux/user/UserSlice";
 import { ThemeDataType } from "../assets/theme";
@@ -27,7 +23,7 @@ interface IThemeProps {
 }
 
 const Main = ({ theme }: IThemeProps) => {
-  // const [loggedInUser, setLoggedInUser] = useState<IUserModel | null>(null);
+
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
@@ -41,24 +37,9 @@ const Main = ({ theme }: IThemeProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // async function fetchLoggedInUser() {
-    //   try {
-    //     dispatch(signInStart());
-
-    //     const user = await api.getLoggedInUser();
-
-    //     console.log("logged in user :  ", user);
-
-    //     dispatch(loggedInUserRedux(user));
-    //     // setLoggedInUser(user);
-    //   } catch (error) {
-    //     console.log(error);
-    //     dispatch(signInFailure(error));
-    //   }
-    // }
-    // fetchLoggedInUser();
 
     dispatch(fetchLoggedInUser());
+
   }, []);
 
   return (
@@ -83,9 +64,6 @@ const Main = ({ theme }: IThemeProps) => {
           theme={theme}
         />
 
-        {/* <p className="text-red-500 mt-5">
-            {error && error.message}
-          </p> */}
 
         <div className="  ">
           {showRegModel && (

@@ -22,7 +22,7 @@ const TodoPage = ({ loggedInUser, theme }: ITodoPageProps) => {
               <div></div>
               <div className=" font-extrabold">
                 <div>note :-</div>
-                Tap the Todo for a Tick
+                Tap on the Todo for a Tick
               </div>
             </div>
           </>
