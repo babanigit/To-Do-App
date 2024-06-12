@@ -8,8 +8,8 @@ import { Card } from "react-bootstrap";
 
 import * as TodoApi from "../network/fetchApi";
 
-// import { useAppDispatch, useAppSelector } from "../../redux/hook";
-// import { deleteTodo } from "../../redux/todo/TodoSlice";
+import { useAppDispatch } from "../../redux/hook";
+import { deleteSuccess, deleteTodo } from "../../redux/todo/TodoSlice";
 
 import { useState } from "react";
 import { ThemeDataType } from "../../assets/theme";
@@ -17,7 +17,7 @@ import { ThemeDataType } from "../../assets/theme";
 interface IProps {
   todos: ITodoModel;
   onTodosClicked: (todos: ITodoModel) => void;
-  onDeleteTodosClicked: (todos: ITodoModel) => void;
+  // onDeleteTodosClicked: (todos: ITodoModel) => void;
 
   theme: ThemeDataType;
   onTodosSaved: (todo: ITodoModel) => void;
@@ -26,13 +26,13 @@ interface IProps {
 const Todo = ({
   todos,
   onTodosClicked,
-  onDeleteTodosClicked,
+  // onDeleteTodosClicked,
   theme,
   onTodosSaved,
 }: IProps) => {
   //redux
   // const { currentTodos,currentSingleTodo } = useAppSelector((state) => state.todoDataInfo);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [trail, setTrail] = useState<ITodoModel>(todos);
 
@@ -105,11 +105,14 @@ const Todo = ({
 
               <MdDelete
                 onClick={async (e) => {
-                  onDeleteTodosClicked(todos);
+                  // onDeleteTodosClicked(todos);
                   e.stopPropagation();
-                  
-                  // const confirm = window.confirm("are you sure?");
-                  // if (confirm) dispatch(deleteTodo(todos._id))
+
+                  const confirm = window.confirm("are you sure?");
+                  if (confirm) {
+                    dispatch(deleteTodo(todos._id));
+                    dispatch(deleteSuccess());
+                  }
                 }}
               />
             </div>

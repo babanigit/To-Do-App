@@ -5,8 +5,6 @@ import { FaPlus } from "react-icons/fa";
 import AddEditTodoDialog from "./AddEditTodoDialog";
 import Todo from "./Todo";
 
-import * as TodoApi from "../network/fetchApi";
-
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { currentAllTodos, fetchTodo } from "../../redux/todo/TodoSlice";
 import { ThemeDataType } from "../../assets/theme";
@@ -17,9 +15,8 @@ interface Iprops {
 
 const TodoPageLoggedIn = ({ theme }: Iprops) => {
   //redux
-  const { todoLoadingError, todoLoading, currentTodos } = useAppSelector(
-    (state) => state.todoDataInfo
-  );
+  const { todoLoadingError, todoLoading, currentTodos, deletedTodo } =
+    useAppSelector((state) => state.todoDataInfo);
   const dispatch = useAppDispatch();
 
   const [todos, setTodos] = useState<ITodoModel[]>(currentTodos);
@@ -29,28 +26,9 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
 
   useEffect(() => {
     dispatch(fetchTodo());
-  }, [showAddTodos, todoToEdit]);
+  }, [showAddTodos, todoToEdit, deletedTodo]);
 
   console.log(" current todos from redux ", currentTodos);
-
-  // to delete note
-  async function deleteTodos(todo: ITodoModel) {
-    const confirm = window.confirm("are you sure?");
-    try {
-      if (confirm) {
-        await TodoApi.deleteTodos(todo._id);
-
-        dispatch(
-          currentAllTodos(
-            currentTodos.filter((existingTodo) => existingTodo._id !== todo._id)
-          )
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
 
   const todoGrid = (
     <Row
@@ -62,7 +40,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
             theme={theme}
             todos={T}
             onTodosClicked={setTodoToEdit}
-            onDeleteTodosClicked={deleteTodos}
+            // onDeleteTodosClicked={deleteTodos}
             onTodosSaved={(updateTodos) => {
               dispatch(
                 currentAllTodos(
