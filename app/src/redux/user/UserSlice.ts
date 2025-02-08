@@ -1,18 +1,16 @@
-import { createAction, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAction,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import type { RootState } from "../../redux/store";
 import { IUserError, IUserModel } from "../../components/modal/userModal";
 
 import * as API from "../../components/network/fetchApi";
 
-//actions
-export const fetchLoggedInUser = createAsyncThunk("fetchLoggedInUser", async () => {
-  const user = await API.getLoggedInUser();
-  return user;
-});
-
 // Define a type for the slice state
 interface IUserDataState {
-
   currentUser: IUserModel | null;
   loading: boolean;
   error: IUserError | null;
@@ -20,16 +18,29 @@ interface IUserDataState {
 
 // Define the initial state using that type
 const initialState: IUserDataState = {
-
   currentUser: null,
   loading: false,
   error: null,
 };
 
-// Define the fetchUserRejected action creator with the payload type IUserError
-const fetchUserRejected = createAction<IUserError | null>("fetchLoggedInUser/rejected");
+// using Redux Thunk
+//actions
+export const fetchLoggedInUser = createAsyncThunk(
+  "fetchLoggedInUser",
+  async () => {
+    const user = await API.getLoggedInUser();
+    return user;
+  }
+);
 
-const fetchUserPending = createAction<IUserModel | null>("fetchLoggedInUser/pending");
+// Define the fetchUserRejected action creator with the payload type IUserError
+const fetchUserRejected = createAction<IUserError | null>(
+  "fetchLoggedInUser/rejected"
+);
+
+const fetchUserPending = createAction<IUserModel | null>(
+  "fetchLoggedInUser/pending"
+);
 
 export const UserDataSlice = createSlice({
   name: "userDataInfo",
@@ -37,10 +48,9 @@ export const UserDataSlice = createSlice({
   initialState,
 
   extraReducers: (builder) => {
-
-    builder.addCase(fetchUserPending, (state, action ) => {
+    builder.addCase(fetchUserPending, (state, action) => {
       state.loading = true;
-      state.currentUser =action.payload;
+      state.currentUser = action.payload;
     });
 
     builder.addCase(
@@ -58,10 +68,6 @@ export const UserDataSlice = createSlice({
   },
 
   reducers: {
-   
-    loggedInUserRedux: (state, action: PayloadAction<IUserModel | null>) => {
-      state.currentUser = action.payload;
-    },
     signInStart: (state) => {
       state.loading = true;
     },
@@ -91,7 +97,6 @@ export const {
   signInFailure,
 
   signOut,
-  loggedInUserRedux,
 } = UserDataSlice.actions;
 
 export default UserDataSlice.reducer;

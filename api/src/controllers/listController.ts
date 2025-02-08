@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 export interface ITodo {
   todoState?: boolean;
   text?: string;
-  title?:string;
+  title?: string;
   // userId?:string;
 }
 
@@ -35,8 +35,8 @@ export const getTodos = async (
     // Type assertion to JwtPayload (haven't used yet)
     const decoded = jwt.verify(getCookieAuth, process.env.SECRET) as JwtPayload;
 
-    const notes = await TodoModel.find({ userId: decoded.id }).exec();
-    res.status(200).json(notes);
+    const Todos = await TodoModel.find({ userId: decoded.id }).exec();
+    res.status(200).json(Todos);
   } catch (error) {
     next(error);
   }
@@ -86,7 +86,7 @@ export const createTodo: RequestHandler<
   unknown
 > = async (req, res, next) => {
   try {
-    const { todoState, text,title }: ITodo = req.body;
+    const { todoState, text, title }: ITodo = req.body;
     const getCookieAuth = req.cookies.access_token;
 
     assertIsDefine("cookie", getCookieAuth);
@@ -119,7 +119,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
   try {
     const todoId = req.params.todoId;
     const newTodoState = req.body.todoState;
-    const newTitle= req.body.title;
+    const newTitle = req.body.title;
     const newText = req.body.text;
     const getCookieAuth = req.cookies.access_token;
 
@@ -149,7 +149,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
     todo.todoState = newTodoState;
     todo.text = newText;
-    todo.title=newTitle;
+    todo.title = newTitle;
 
     const updateTodo = await todo.save();
     res.status(201).json(updateTodo);
@@ -158,7 +158,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const deleteNote: RequestHandler = async (req, res, next) => {
+export const deleteTodo: RequestHandler = async (req, res, next) => {
   try {
     const todoId = req.params.todoId;
     const getCookieAuth = req.cookies.access_token;

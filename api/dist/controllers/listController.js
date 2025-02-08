@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteNote = exports.updateTodo = exports.createTodo = exports.getTodo = exports.getTodos = void 0;
+exports.deleteTodo = exports.updateTodo = exports.createTodo = exports.getTodo = exports.getTodos = void 0;
 const http_errors_1 = __importDefault(require("http-errors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const assertIsDefine_1 = require("../middlewares/assertIsDefine");
@@ -27,8 +27,8 @@ const getTodos = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             throw (0, http_errors_1.default)(404, " undefined secret key ");
         // Type assertion to JwtPayload (haven't used yet)
         const decoded = jsonwebtoken_1.default.verify(getCookieAuth, process.env.SECRET);
-        const notes = yield listSchema_1.default.find({ userId: decoded.id }).exec();
-        res.status(200).json(notes);
+        const Todos = yield listSchema_1.default.find({ userId: decoded.id }).exec();
+        res.status(200).json(Todos);
     }
     catch (error) {
         next(error);
@@ -118,7 +118,7 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateTodo = updateTodo;
-const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const todoId = req.params.todoId;
         const getCookieAuth = req.cookies.access_token;
@@ -144,4 +144,4 @@ const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         next(error);
     }
 });
-exports.deleteNote = deleteNote;
+exports.deleteTodo = deleteTodo;

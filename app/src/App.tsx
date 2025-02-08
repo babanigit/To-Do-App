@@ -3,8 +3,7 @@
 import Main from "./conteners/Main";
 import { ThemeProvider } from "styled-components";
 import { themes } from "./assets/theme";
-import  { useState, createContext } from "react";
-
+import { useState, createContext } from "react";
 
 interface SetThemeContextType {
   (value: string): void;
@@ -12,20 +11,16 @@ interface SetThemeContextType {
 
 export const SetThemeContext = createContext<SetThemeContextType>(() => {});
 
-
-const App =  () => {
-  const [themeState, setThemeState] = useState<string>("dark"); 
+const App = () => {
+  const [themeState, setThemeState] = useState<string>("dark");
 
   return (
     <div>
-        <ThemeProvider theme={themes[themeState]}>
+      <ThemeProvider theme={themes[themeState]}>
         <SetThemeContext.Provider value={setThemeState}>
-
-      <Main theme={themes[themeState]} />
-      </SetThemeContext.Provider>
-
+          <Main theme={themes[themeState]} />
+        </SetThemeContext.Provider>
       </ThemeProvider>
-
     </div>
   );
 };

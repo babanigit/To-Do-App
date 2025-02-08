@@ -11,23 +11,11 @@ import { IUserError } from "../../components/modal/userModal";
 
 import * as API from "../../components/network/fetchApi";
 
-//actions
-export const fetchTodo = createAsyncThunk("fetchTodos", async () => {
-  const todos = await API.fetchTodos();
-  return todos;
-});
-
-export const deleteTodo = createAsyncThunk("deleteTodo", async (todoId:string) => {
-  const todoDelete= await API.deleteTodos(todoId);
-  return todoDelete;
-});
-
-
 // Define a type for the slice state
 interface ITodoInfoState {
   currentSingleTodo: ITodoModel | null;
   currentTodos: ITodoModel[];
-  deletedTodo: ITodoModel |null
+  deletedTodo: ITodoModel | null;
 
   todoLoadingError: boolean;
   todoLoading: boolean;
@@ -36,7 +24,7 @@ interface ITodoInfoState {
   showAdd: boolean;
   showEdit: boolean;
 
-  refresh:boolean
+  refresh: boolean;
 }
 
 // Define the initial state using that type
@@ -52,17 +40,34 @@ const initialState: ITodoInfoState = {
 
   showAdd: false,
   showEdit: false,
-  
-  refresh:false
+
+  refresh: false,
 };
+
+// fetch todo redux thunk
+//actions
+export const fetchTodo = createAsyncThunk("fetchTodos", async () => {
+  const todos = await API.fetchTodos();
+  return todos;
+});
 
 // Define the fetchTodoRejected action creator with the payload type IUserError
 const fetchTodoRejected = createAction<IUserError | null>("fetchTodo/rejected");
 
-const fetchtodoPending = createAction<ITodoModel[] | []>("fetchTodo/pending");
+const fetchTodoPending = createAction<ITodoModel[] | []>("fetchTodo/pending");
 
-const deleteTodoFulfilled = createAction<ITodoModel |null>("deleteTodo/fulfilled");
+// deleteTodo redux thunk
+export const deleteTodo = createAsyncThunk(
+  "deleteTodo",
+  async (todoId: string) => {
+    const todoDelete = await API.deleteTodos(todoId);
+    return todoDelete;
+  }
+);
 
+const deleteTodoFulfilled = createAction<ITodoModel | null>(
+  "deleteTodo/fulfilled"
+);
 
 export const todoInfoSlice = createSlice({
   name: "todoInfo",
@@ -70,16 +75,16 @@ export const todoInfoSlice = createSlice({
   initialState,
 
   extraReducers: (builder) => {
-    builder.addCase(fetchtodoPending, (state, action) => {
+    builder.addCase(fetchTodoPending, (state, action) => {
       state.todoLoading = true;
       state.todoLoadingError = false;
 
-      state.currentTodos=action.payload;
+      state.currentTodos = action.payload;
     });
 
     builder.addCase(
       fetchTodo.fulfilled,
-      (state, action: PayloadAction<ITodoModel[]|[]>) => {
+      (state, action: PayloadAction<ITodoModel[] | []>) => {
         state.todoLoading = false;
         state.currentTodos = action.payload;
       }
@@ -90,7 +95,6 @@ export const todoInfoSlice = createSlice({
       state.error = action.payload;
     });
 
-
     builder.addCase(deleteTodo.pending, (state) => {
       state.todoLoading = true;
       // state.todoLoadingError = false;
@@ -100,15 +104,12 @@ export const todoInfoSlice = createSlice({
 
     builder.addCase(
       deleteTodoFulfilled,
-      (state, action: PayloadAction<ITodoModel|null>) => {
+      (state, action: PayloadAction<ITodoModel | null>) => {
         state.todoLoading = false;
         state.deletedTodo = action.payload;
       }
     );
-
   },
-
-
 
   reducers: {
     showAddRedux: (state, action: PayloadAction<boolean>) => {
@@ -156,7 +157,6 @@ export const todoInfoSlice = createSlice({
     },
     deleteSuccess: (state) => {
       state.deletedTodo = null;
-
     },
   },
 });
@@ -178,7 +178,7 @@ export const {
   updateTodoFailed,
   updateTodoStart,
   updateTodoSuccess,
-  deleteSuccess
+  deleteSuccess,
 } = todoInfoSlice.actions;
 
 export default todoInfoSlice.reducer;
