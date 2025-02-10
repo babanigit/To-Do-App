@@ -1,36 +1,35 @@
 // import { ConflictError, UnauthorizedError } from "../error/httpError";
 import { ITodoModel } from "../modal/todoModal";
-import { ILoginCred, IRegisterCred, IUserError, IUserModel } from "../modal/userModal";
+import {
+  ILoginCred,
+  IRegisterCred,
+  IUserError,
+  IUserModel,
+} from "../modal/userModal";
 
 // const todoLink = "api/todos/";
 const userLink = "api/users/";
-const todoLink = "api/todos/"
+const todoLink = "api/todos/";
 
 // fetcher.
 const fetchData = async (input: RequestInfo, init?: RequestInit) => {
   const res = await fetch(input, init);
 
   if (res.ok) return res;
-
   else {
     const errorBody: IUserError = await res.json();
     const message = errorBody.message;
-    throw new Error(
-      message
-    );
-
+    throw new Error(message);
   }
 };
 
 //get logged in user
 export const getLoggedInUser = async (): Promise<IUserModel> => {
-
   const res = await fetchData(userLink, {
     method: "GET",
   });
 
   return res.json();
-
 };
 
 //get register
@@ -81,8 +80,7 @@ export async function fetchTodos(): Promise<ITodoModel[]> {
 }
 
 // fetch notes
-export async function getTodo(  noteId: string,
-): Promise<ITodoModel[]> {
+export async function getTodo(noteId: string): Promise<ITodoModel[]> {
   const res = await fetchData(todoLink + noteId, {
     method: "GET",
   });
@@ -104,7 +102,7 @@ export async function createTodos(note: ITodoModel): Promise<ITodoModel> {
 // update notes
 export async function updateTodos(
   noteId: string,
-  note: ITodoModel 
+  note: ITodoModel
 ): Promise<ITodoModel> {
   const res = await fetchData(todoLink + noteId, {
     method: "PATCH",
@@ -118,9 +116,10 @@ export async function updateTodos(
 }
 
 //tick todo
-export async function tickTodo(noteId: string,
-  note: ITodoModel): Promise<ITodoModel> {
-
+export async function tickTodo(
+  noteId: string,
+  note: ITodoModel
+): Promise<ITodoModel> {
   const res = await fetchData(todoLink + noteId, {
     method: "PATCH",
     headers: {
@@ -130,11 +129,9 @@ export async function tickTodo(noteId: string,
   });
 
   return res.json();
-
 }
 
 // delete note
 export async function deleteTodos(noteId: string) {
   await fetchData(todoLink + noteId, { method: "DELETE" });
 }
-

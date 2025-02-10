@@ -12,7 +12,7 @@ interface SetThemeContextType {
 export const SetThemeContext = createContext<SetThemeContextType>(() => {});
 
 const App = () => {
-  const [themeState, setThemeState] = useState<string>("dark");
+  const [themeState, setThemeState] = useState<string>("light");
 
   return (
     <div>

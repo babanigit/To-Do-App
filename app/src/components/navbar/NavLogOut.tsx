@@ -25,7 +25,7 @@ const NavLogOut = ({
           className=" border-2 bg--600 p-2 rounded-lg "
           onClick={onRegisterClicked}
         >
-          register
+          Register
         </button>
         <button
           style={{
@@ -36,7 +36,7 @@ const NavLogOut = ({
           className=" border-2 bg--600 p-2 rounded-lg "
           onClick={onLoginClicked}
         >
-          login
+          Login
         </button>
       </div>
     </>

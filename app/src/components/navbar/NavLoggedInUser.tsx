@@ -44,7 +44,7 @@ const NavLoggedInUser = ({ theme }: IProps) => {
           className=" border-2 px-3 rounded-xl"
           onClick={logout}
         >
-          log out
+          Log Out
         </button>
       </div>
     </>

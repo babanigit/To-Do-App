@@ -17,13 +17,13 @@ const TodoPage = ({ loggedInUser, theme }: ITodoPageProps) => {
           </>
         ) : (
           <>
-            <div className=" m-5 grid justify-center place-content-center gap-3 ">
-              <div>Log In to get your Todo</div>
-              <div></div>
+            <div className=" m-5 grid justify-center place-content-center gap-3 font-extrabold ">
+              <div>Log In to Add or Get your Todo</div>
+              {/* <div></div>
               <div className=" font-extrabold">
                 <div>note :-</div>
                 Tap on the Todo for a Tick
-              </div>
+              </div> */}
             </div>
           </>
         )}
