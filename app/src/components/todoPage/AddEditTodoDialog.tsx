@@ -42,8 +42,8 @@ const AddEditTodoDialog = ({
     defaultValues: {
       title: todosToEdit?.title || "",
       text: todosToEdit?.text || "",
-      dueDate: todosToEdit?.dueDate 
-        ? new Date(todosToEdit.dueDate).toISOString().split('T')[0]
+      dueDate: todosToEdit?.dueDate
+        ? new Date(todosToEdit.dueDate).toISOString().split("T")[0]
         : "",
       priority: todosToEdit?.priority || "Medium",
     },
@@ -76,10 +76,7 @@ const AddEditTodoDialog = ({
       <div className="p-6 rounded-lg" style={{ backgroundColor: theme.body }}>
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 
-            className="text-xl font-semibold"
-            style={{ color: theme.text }}
-          >
+          <h2 className="text-xl font-semibold" style={{ color: theme.text }}>
             {todosToEdit ? "Edit Task" : "Add New Task"}
           </h2>
           <button
@@ -91,7 +88,7 @@ const AddEditTodoDialog = ({
         </div>
 
         {error && (
-          <div 
+          <div
             className="mb-4 p-3 rounded-lg bg-red-100 text-red-600"
             style={{ borderColor: theme.text }}
           >
@@ -102,7 +99,7 @@ const AddEditTodoDialog = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title Input */}
           <div>
-            <label 
+            <label
               className="block mb-1 font-medium"
               style={{ color: theme.text }}
             >
@@ -157,9 +154,7 @@ const AddEditTodoDialog = ({
               placeholder="Add more details about this task..."
             />
             {errors.text && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.text.message}
-              </p>
+              <p className="mt-1 text-sm text-red-500">{errors.text.message}</p>
             )}
           </div>
 
@@ -181,7 +176,8 @@ const AddEditTodoDialog = ({
                 className="w-full p-2 rounded-lg border appearance-none"
                 style={{
                   backgroundColor: theme.body,
-                  color: priorities.find(p => p.value === watchPriority)?.color,
+                  color: priorities.find((p) => p.value === watchPriority)
+                    ?.color,
                   borderColor: theme.text,
                 }}
               >
@@ -250,7 +246,11 @@ const AddEditTodoDialog = ({
                 color: theme.body,
               }}
             >
-              {isSubmitting ? "Saving..." : todosToEdit ? "Update Task" : "Add Task"}
+              {isSubmitting
+                ? "Saving..."
+                : todosToEdit
+                ? "Update Task"
+                : "Add Task"}
             </button>
           </div>
         </form>

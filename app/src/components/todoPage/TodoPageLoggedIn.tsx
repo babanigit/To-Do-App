@@ -5,6 +5,8 @@ import { FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
+import { FiCalendar, FiClock, FiFlag } from "react-icons/fi";
+import { FaSort } from "react-icons/fa";
 import AddEditTodoDialog from "./AddEditTodoDialog";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
@@ -24,6 +26,13 @@ interface Iprops {
 }
 
 type TabType = "all" | "pending" | "completed";
+type SortType = "created" | "dueDate" | "priority" | "updated";
+
+const priorityOrder = {
+  High: 1,
+  Medium: 2,
+  Low: 3,
+};
 
 const TodoPageLoggedIn = ({ theme }: Iprops) => {
   const { todoLoadingError, todoLoading, currentTodos, deletedTodo } =
@@ -33,6 +42,8 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
   const [showAddTodos, setShowAddTodos] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("all");
+  const [sortBy, setSortBy] = useState<SortType>("created");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     dispatch(fetchTodo());
@@ -59,6 +70,40 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     }
   };
 
+  const sortTodos = (todos: ITodoModel[]) => {
+    return [...todos].sort((a, b) => {
+      const multiplier = sortDirection === "asc" ? 1 : -1;
+
+      switch (sortBy) {
+        case "created":
+          return (
+            (new Date(a.createdAt).getTime() -
+              new Date(b.createdAt).getTime()) *
+            multiplier
+          );
+        case "updated":
+          return (
+            (new Date(a.updatedAt).getTime() -
+              new Date(b.updatedAt).getTime()) *
+            multiplier
+          );
+        case "dueDate":
+          return (
+            (new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime()) *
+            multiplier
+          );
+        case "priority":
+          return (
+            (priorityOrder[a.priority as keyof typeof priorityOrder] -
+              priorityOrder[b.priority as keyof typeof priorityOrder]) *
+            multiplier
+          );
+        default:
+          return 0;
+      }
+    });
+  };
+
   const filteredTodos = currentTodos.filter((todo) => {
     switch (activeTab) {
       case "pending":
@@ -69,6 +114,8 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
         return true;
     }
   });
+
+  const sortedTodos = sortTodos(filteredTodos);
 
   const TabButton = ({ tab, label }: { tab: TabType; label: string }) => (
     <button
@@ -95,6 +142,39 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     </button>
   );
 
+  const SortIcon = ({ type, label }: { type: SortType; label: string }) => (
+    <button
+      onClick={() => {
+        if (sortBy === type) {
+          setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+        } else {
+          setSortBy(type);
+          setSortDirection("asc");
+        }
+      }}
+      className={`flex items-center gap-2 px-3 py-1 rounded-lg transition-colors ${
+        sortBy === type ? "font-bold" : "opacity-70"
+      }`}
+      style={{
+        background: sortBy === type ? theme.text : "transparent",
+        color: sortBy === type ? theme.body : theme.text,
+      }}
+    >
+      {type === "created" && <FiClock />}
+      {type === "updated" && <FiClock />}
+      {type === "dueDate" && <FiCalendar />}
+      {type === "priority" && <FiFlag />}
+      {label}
+      {sortBy === type && (
+        <FaSort
+          className={`transform ${
+            sortDirection === "desc" ? "rotate-180" : ""
+          }`}
+        />
+      )}
+    </button>
+  );
+
   const renderTodoList = () => {
     if (todoLoading) {
       return (
@@ -115,7 +195,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
       );
     }
 
-    if (!filteredTodos.length) {
+    if (!sortedTodos.length) {
       return (
         <div
           className="text-center p-8 rounded-lg"
@@ -141,7 +221,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
 
     return (
       <div className="space-y-3">
-        {filteredTodos.map((todo) => (
+        {sortedTodos.map((todo) => (
           <div
             key={todo._id}
             className="rounded-lg shadow-sm overflow-hidden"
@@ -178,16 +258,23 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
                   {todo.text}
                 </p>
                 <div
-                  className="flex gap-4 mt-2 text-xs opacity-60"
+                  className="flex flex-wrap gap-4 mt-2 text-xs opacity-60"
                   style={{ color: theme.text }}
                 >
-                  <span>
+                  <span className="flex items-center gap-1">
+                    <FiClock />
                     {todo.updatedAt > todo.createdAt
                       ? "Updated: " + FormatDate(todo.updatedAt)
                       : "Created: " + FormatDate(todo.createdAt)}
                   </span>
-                  <span>Priority: {todo.priority}</span>
-                  <span>Due: {FormatDate(todo.dueDate!)}</span>
+                  <span className="flex items-center gap-1">
+                    <FiFlag />
+                    Priority: {todo.priority}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FiCalendar />
+                    Due: {FormatDate(todo.dueDate!)}
+                  </span>
                 </div>
               </div>
 
@@ -239,10 +326,19 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
         </button>
       </div>
 
-      <div className="flex gap-4 mb-6">
-        <TabButton tab="all" label="All" />
-        <TabButton tab="pending" label="Pending" />
-        <TabButton tab="completed" label="Completed" />
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="flex gap-4">
+          <TabButton tab="all" label="All" />
+          <TabButton tab="pending" label="Pending" />
+          <TabButton tab="completed" label="Completed" />
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <SortIcon type="created" label="Created Date" />
+          <SortIcon type="updated" label="Updated Date" />
+          <SortIcon type="dueDate" label="Due Date" />
+          <SortIcon type="priority" label="Priority" />
+        </div>
       </div>
 
       {renderTodoList()}
