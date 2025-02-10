@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 
 import type { RootState } from "../store";
-import { ITodoModel } from "../../components/modal/todoModal";
+import { ITodoModel } from "../../components/modal/todoModal"; 
 import { IUserError } from "../../components/modal/userModal";
 
 import * as API from "../../components/network/fetchApi";
@@ -53,7 +53,6 @@ export const fetchTodo = createAsyncThunk("fetchTodos", async () => {
 
 // Define the fetchTodoRejected action creator with the payload type IUserError
 const fetchTodoRejected = createAction<IUserError | null>("fetchTodo/rejected");
-
 const fetchTodoPending = createAction<ITodoModel[] | []>("fetchTodo/pending");
 
 // deleteTodo redux thunk

@@ -62,7 +62,8 @@ const getTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 exports.getTodo = getTodo;
 const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { todoState, text, title } = req.body;
+        // const { todoState, text, title }: ITodo = req.body;
+        const { title, text, dueDate, priority } = req.body;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
         if (!title)
@@ -75,7 +76,9 @@ const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             throw (0, http_errors_1.default)(400, "todo must have a text");
         const newTodo = yield listSchema_1.default.create({
             userId: decoded.id, //here we stored new property "userId" which has req.cookie.userId
-            todoState,
+            // todoState,
+            dueDate,
+            priority,
             title,
             text,
         });
@@ -88,10 +91,8 @@ const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.createTodo = createTodo;
 const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { title, completed, priority, text } = req.body;
         const todoId = req.params.todoId;
-        const newTodoState = req.body.todoState;
-        const newTitle = req.body.title;
-        const newText = req.body.text;
         const getCookieAuth = req.cookies.access_token;
         (0, assertIsDefine_1.assertIsDefine)("cookie", getCookieAuth);
         if (!process.env.SECRET)
@@ -107,9 +108,11 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         if (todo && todo.userId && !todo.userId.equals(decoded.id)) {
             throw (0, http_errors_1.default)(401, "you cannot access this todo");
         }
-        todo.todoState = newTodoState;
-        todo.text = newText;
-        todo.title = newTitle;
+        // Update fields only if provided, otherwise retain existing values
+        todo.title = title !== null && title !== void 0 ? title : todo.title;
+        todo.text = text !== null && text !== void 0 ? text : todo.text;
+        todo.priority = priority !== null && priority !== void 0 ? priority : todo.priority;
+        todo.completed = completed !== null && completed !== void 0 ? completed : todo.completed;
         const updateTodo = yield todo.save();
         res.status(201).json(updateTodo);
     }

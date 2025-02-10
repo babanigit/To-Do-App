@@ -1,26 +1,30 @@
 import { useEffect, useState } from "react";
 import { ITodoModel } from "../modal/todoModal";
-import { Row, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 import AddEditTodoDialog from "./AddEditTodoDialog";
-import Todo from "./Todo";
-
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { currentAllTodos, fetchTodo } from "../../redux/todo/TodoSlice";
+import {
+  currentAllTodos,
+  deleteTodo,
+  fetchTodo,
+} from "../../redux/todo/TodoSlice";
 import { ThemeDataType } from "../../assets/theme";
+import { FormatDate } from "../../utils/FormateDates";
 
 interface Iprops {
   theme: ThemeDataType;
 }
 
 const TodoPageLoggedIn = ({ theme }: Iprops) => {
-  //redux
   const { todoLoadingError, todoLoading, currentTodos, deletedTodo } =
     useAppSelector((state) => state.todoDataInfo);
   const dispatch = useAppDispatch();
 
   const [todos, setTodos] = useState<ITodoModel[]>(currentTodos);
-
   const [showAddTodos, setShowAddTodos] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<ITodoModel | null>(null);
 
@@ -28,56 +32,30 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
     dispatch(fetchTodo());
   }, [showAddTodos, todoToEdit, deletedTodo]);
 
-  console.log(" current todos from redux ", currentTodos);
-
-  const todoGrid = (
-    <Row
-    // xs={1} md={2} xl={3} className={`g-4  `}
-    >
-      {currentTodos.map((T) => (
-        <div className=" p-2" key={T._id}>
-          <Todo
-            theme={theme}
-            todos={T}
-            onTodosClicked={setTodoToEdit}
-            // onDeleteTodosClicked={deleteTodos}
-            onTodosSaved={(updateTodos) => {
-              dispatch(
-                currentAllTodos(
-                  currentTodos.map((existingNote) =>
-                    existingNote._id === updateTodos._id
-                      ? updateTodos
-                      : existingNote
-                  )
-                )
-              );
-              setTodoToEdit(null);
-            }}
-          />
-        </div>
-      ))}
-    </Row>
-  );
-
   return (
-    <>
-      <div className=" w-full grid place-content-end p-3">
+    <div className="max-w-3xl mx-auto p-4 min-h-screen">
+      
+      {/* Header with Title and Add Button */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold" style={{ color: theme.text }}>
+          My Tasks
+        </h1>
         <button
           onClick={() => setShowAddTodos(true)}
-          className=" w-auto h-fit border-2 p-2 rounded-lg"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
           style={{
             background: theme.text,
             color: theme.body,
-            borderColor: theme.body,
           }}
         >
           <FaPlus />
+          <span>Add Task</span>
         </button>
       </div>
 
-      {/* todoLoading */}
+      {/* Loading State */}
       {todoLoading && (
-        <div className=" w-full h-screen flex place-content-center ">
+        <div className="flex justify-center items-center h-64">
           <Spinner
             style={{
               color: theme.text,
@@ -87,24 +65,127 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
         </div>
       )}
 
+      {/* Error State */}
       {todoLoadingError && (
-        <p> Something went wrong please refresh the page.</p>
+        <div
+          className="text-center p-4 rounded-lg"
+          style={{ color: theme.text, backgroundColor: theme.body }}
+        >
+          Something went wrong. Please refresh the page.
+        </div>
       )}
 
-      {!todoLoading && !todoLoadingError && (
-        <>
-          {currentTodos.length > 0 ? (
-            todoGrid
-          ) : (
-            <p>
-              You don't have any Todo yet, click on + icon to Add your first
-              Todo
-            </p>
-          )}
-        </>
+      {/* Empty State */}
+      {!todoLoading && !todoLoadingError && currentTodos.length === 0 && (
+        <div
+          className="text-center p-8 rounded-lg"
+          style={{ color: theme.text, backgroundColor: theme.body }}
+        >
+          <p className="mb-4">You don't have any tasks yet</p>
+          <button
+            onClick={() => setShowAddTodos(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg"
+            style={{
+              background: theme.text,
+              color: theme.body,
+            }}
+          >
+            <FaPlus size={12} />
+            <span>Add your first task</span>
+          </button>
+        </div>
       )}
 
-      {/* to add */}
+      {/* Todo List */}
+      {!todoLoading && !todoLoadingError && currentTodos.length > 0 && (
+        <div className="space-y-3">
+          {currentTodos.map((todo) => (
+            <div
+              key={todo._id}
+              className="rounded-lg shadow-sm overflow-hidden"
+              style={{ backgroundColor: theme.body }}
+            >
+              <div
+                className="p-4 flex items-start gap-4 cursor-pointer"
+                onClick={() => {
+                  const updatedTodo = { ...todo, todoState: !todo.todoState };
+                  dispatch(
+                    currentAllTodos(
+                      currentTodos.map((t) =>
+                        t._id === todo._id ? updatedTodo : t
+                      )
+                    )
+                  );
+                }}
+              >
+                {/* Checkbox */}
+                <div
+                  className="mt-1 rounded-full p-1 border-2 flex-shrink-0"
+                  style={{ borderColor: theme.text }}
+                >
+                  {todo.todoState && (
+                    <TiTick size={20} style={{ color: theme.text }} />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-grow">
+                  <h3
+                    className={`font-medium mb-1 ${
+                      todo.todoState ? "line-through opacity-60" : ""
+                    }`}
+                    style={{ color: theme.text }}
+                  >
+                    {todo.title}
+                  </h3>
+                  <p
+                    className={`text-sm ${
+                      todo.todoState ? "line-through opacity-60" : ""
+                    }`}
+                    style={{ color: theme.text }}
+                  >
+                    {todo.text}
+                  </p>
+                  <p
+                    className="text-xs mt-2 opacity-60"
+                    style={{ color: theme.text }}
+                  >
+                    {todo.updatedAt > todo.createdAt
+                      ? "Updated: " + FormatDate(todo.updatedAt)
+                      : "Created: " + FormatDate(todo.createdAt)}
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2 flex-shrink-0">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTodoToEdit(todo);
+                    }}
+                    className="p-2 rounded-lg hover:bg-black/5"
+                  >
+                    <FaEdit style={{ color: theme.text }} />
+                  </button>
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      if (window.confirm("Are you sure?")) {
+                        dispatch(deleteTodo(todo._id));
+                      }
+                    }}
+                    className="p-2 rounded-lg hover:bg-black/5"
+                  >
+                    <MdDelete style={{ color: theme.text }} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Dialogs */}
       {showAddTodos && (
         <AddEditTodoDialog
           theme={theme}
@@ -116,7 +197,6 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
         />
       )}
 
-      {/* to edit */}
       {todoToEdit && (
         <AddEditTodoDialog
           theme={theme}
@@ -134,7 +214,7 @@ const TodoPageLoggedIn = ({ theme }: Iprops) => {
           }}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-
 import Navbare from "../components/navbar/Navbare";
 import { Container } from "react-bootstrap";
 import TodoPage from "../pages/TodoPage";
@@ -12,10 +11,7 @@ import LoginModel from "../components/registerAndLogin/LoginModel";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import {
- 
-  fetchLoggedInUser,
-} from "../redux/user/UserSlice";
+import { fetchLoggedInUser } from "../redux/user/UserSlice";
 import { ThemeDataType } from "../assets/theme";
 
 interface IThemeProps {
@@ -23,7 +19,6 @@ interface IThemeProps {
 }
 
 const Main = ({ theme }: IThemeProps) => {
-
   const [showRegModel, setShowRegModel] = useState(false);
   const [showLogModel, setShowLogModel] = useState(false);
 
@@ -37,9 +32,7 @@ const Main = ({ theme }: IThemeProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-
     dispatch(fetchLoggedInUser());
-
   }, []);
 
   return (
@@ -64,8 +57,7 @@ const Main = ({ theme }: IThemeProps) => {
           theme={theme}
         />
 
-
-        <div className="  ">
+        <div>
           {showRegModel && (
             <div>
               {" "}

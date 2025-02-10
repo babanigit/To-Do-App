@@ -1,34 +1,53 @@
 import mongoose, { InferSchemaType, Schema } from "mongoose";
-import { title } from "process";
 
-const todoSchema = new mongoose.Schema({
+const todoSchema = new mongoose.Schema(
+  {
     userId: {
-        type: Schema.Types.ObjectId,
-        require: true
+      type: Schema.Types.ObjectId,
+      require: true,
     },
 
-    text: {
-        type: String,
-        required: true
-    },
     title: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    todoState: {
-        type: Boolean,
-        default: false
+    text: {
+      type: String,
+      required: true,
     },
+
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
+    },
+    dueDate: { type: Date, required: true },
+
+    pending: {
+      type: Boolean,
+      default: false,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+
+    // todoState: {
+    //     type: Boolean,
+    //     default: false
+    // },
+
     // createdAt: {
     //     type: Date,
     //     default: Date.now
     // }
-},
-{
+  },
+  {
     timestamps: true,
-})
+  }
+);
 
 type todo = InferSchemaType<typeof todoSchema>;
 
-const TodoModel = mongoose.model<todo>("TodoData", todoSchema)
+const TodoModel = mongoose.model<todo>("TodoData", todoSchema);
 export default TodoModel;

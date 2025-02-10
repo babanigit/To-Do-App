@@ -7,10 +7,11 @@ import { assertIsDefine } from "../middlewares/assertIsDefine";
 import jwt from "jsonwebtoken";
 
 export interface ITodo {
-  todoState?: boolean;
+  // todoState?: boolean;
   text?: string;
   title?: string;
-  // userId?:string;
+  priority?: "High" | "Medium" | "Low";
+  dueDate?: string; // userId?:string;
 }
 
 import { JwtPayload } from "jsonwebtoken";
@@ -86,7 +87,9 @@ export const createTodo: RequestHandler<
   unknown
 > = async (req, res, next) => {
   try {
-    const { todoState, text, title }: ITodo = req.body;
+    // const { todoState, text, title }: ITodo = req.body;
+    const { title, text, dueDate, priority } = req.body;
+
     const getCookieAuth = req.cookies.access_token;
 
     assertIsDefine("cookie", getCookieAuth);
@@ -105,7 +108,9 @@ export const createTodo: RequestHandler<
     if (!text) throw createHttpError(400, "todo must have a text");
     const newTodo = await TodoModel.create({
       userId: decoded.id, //here we stored new property "userId" which has req.cookie.userId
-      todoState,
+      // todoState,
+      dueDate,
+      priority,
       title,
       text,
     });
@@ -117,10 +122,8 @@ export const createTodo: RequestHandler<
 
 export const updateTodo: RequestHandler = async (req, res, next) => {
   try {
+    const { title, completed, priority, text } = req.body;
     const todoId = req.params.todoId;
-    const newTodoState = req.body.todoState;
-    const newTitle = req.body.title;
-    const newText = req.body.text;
     const getCookieAuth = req.cookies.access_token;
 
     assertIsDefine("cookie", getCookieAuth);
@@ -146,10 +149,12 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
     if (todo && todo.userId && !todo.userId.equals(decoded.id)) {
       throw createHttpError(401, "you cannot access this todo");
     }
-
-    todo.todoState = newTodoState;
-    todo.text = newText;
-    todo.title = newTitle;
+    
+    // Update fields only if provided, otherwise retain existing values
+    todo.title = title ?? todo.title;
+    todo.text = text ?? todo.text;
+    todo.priority = priority ?? todo.priority;
+    todo.completed = completed ?? todo.completed;
 
     const updateTodo = await todo.save();
     res.status(201).json(updateTodo);

@@ -37,20 +37,34 @@ const mongoose_1 = __importStar(require("mongoose"));
 const todoSchema = new mongoose_1.default.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        require: true
-    },
-    text: {
-        type: String,
-        required: true
+        require: true,
     },
     title: {
         type: String,
-        required: true
+        required: true,
     },
-    todoState: {
+    text: {
+        type: String,
+        required: true,
+    },
+    priority: {
+        type: String,
+        enum: ["Low", "Medium", "High"],
+        default: "Medium",
+    },
+    dueDate: { type: Date, required: true },
+    pending: {
         type: Boolean,
-        default: false
+        default: false,
     },
+    completed: {
+        type: Boolean,
+        default: false,
+    },
+    // todoState: {
+    //     type: Boolean,
+    //     default: false
+    // },
     // createdAt: {
     //     type: Date,
     //     default: Date.now
