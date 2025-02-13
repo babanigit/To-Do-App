@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.env
+
+# the import folder is dist
+api/node_modules
+api/src
+api/package.json
+api/package-lock.json
+app
+
+# api/npm-debug.log
+# api/Dockerfile
+# api/.dockerignore
+# api/.env

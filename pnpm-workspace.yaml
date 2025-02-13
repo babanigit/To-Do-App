@@ -1,0 +1,3 @@
+packages:
+  - "api"  # Express.js Backend
+  - "app"  # React Frontend

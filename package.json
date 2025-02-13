@@ -2,6 +2,10 @@
   "name": "to-do-list",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces": [
+    "api",
+    "app"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npm run serve --prefix ./api",
@@ -9,7 +13,8 @@
     "start": "npm start --prefix ./api",
     "i": "npm install --prefix ./app && npm run build --prefix ./app && npm install && npm install ./api",
     "build2": " npm run build --prefix ./app",
-    "start2": "nodemon api/dist/index.js"
+    "start2": "nodemon api/dist/index.js",
+    "DockerStart" : "npm run DockerStart --prefix ./api"
   },
   "keywords": [],
   "author": "",
@@ -45,5 +50,21 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
-  "description": ""
+  "description": "",
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@swc/core",
+      "bcrypt",
+      "esbuild",
+      "pre-commit",
+      "spawn-sync"
+    ],
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "bcrypt",
+      "esbuild",
+      "pre-commit",
+      "spawn-sync"
+    ]
+  }
 }
