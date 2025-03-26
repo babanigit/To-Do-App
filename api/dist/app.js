@@ -61,24 +61,27 @@ app.enable("trust proxy");
 //     schema,
 //     graphiql:process.env.NODE_ENV === "development"
 // }))
-// const dirname = path.resolve();
-const dirname = path_1.default.dirname(path_1.default.resolve());
-// const parentDirname = path.dirname(dirname);
-// const newPath = path.join(parentDirname, path.basename(dirname));
-// console.log(newPath);
+const bool = process.env.NODE_ENV || "production";
+let pathToIndex = path_1.default.resolve();
+if (bool !== "production") {
+    pathToIndex = path_1.default.dirname(path_1.default.resolve());
+    console.log("dirname2 ", pathToIndex);
+}
+const parentDirname = path_1.default.dirname(pathToIndex);
+console.log("parentDirname ", parentDirname);
+const newPath = path_1.default.join(parentDirname, path_1.default.basename(pathToIndex));
+console.log("newPath ", newPath);
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/todos", verifyJwtCookie_1.verifyToken, listRoutes_1.default);
 // use the frontend static files
-const bool = process.env.NODE_ENV || "production";
-if (bool == "production") {
-    console.log("Using the Frontend static files");
-    app.use(express_1.default.static(path_1.default.join(dirname, "/app/dist")));
-    console.log(dirname);
-    app.get("*", (req, res) => {
-        res.sendFile(path_1.default.join(dirname, "/app/dist/index.html"));
-    });
-}
+// if (bool === "production" && pathToIndex!) {
+console.log("Using the Frontend static files");
+app.use(express_1.default.static(path_1.default.join(pathToIndex, "/app/dist")));
+app.get("*", (req, res) => {
+    res.sendFile(path_1.default.join(pathToIndex, "/app/dist/index.html"));
+});
+// }
 // get
 app.get("/", (req, res) => {
     res.send("Express + TypeScript Server");

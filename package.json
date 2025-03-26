@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npm run serve --prefix ./api",
     "build": "npm install --prefix ./app && npm run build --prefix ./app && npm install",
-    "start": "npm start --prefix ./api",
+    "start": "node -r dotenv/config api/dist/index.js",
     "i": "npm install --prefix ./app && npm run build --prefix ./app && npm install && npm install ./api",
     "build2": " npm run build --prefix ./app",
     "start2": "nodemon api/dist/index.js",
@@ -20,6 +20,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5",
     "api": "file:api",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",

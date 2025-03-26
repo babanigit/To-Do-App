@@ -29,7 +29,9 @@ const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
         console.error(error);
     }
 });
-connectDb();
+if (!DB) {
+    connectDb();
+}
 app_1.default.listen(port, () => {
     console.log(`💚[server]: Server is running at http://localhost:${port}`);
 });

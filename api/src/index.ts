@@ -4,7 +4,8 @@ import app from "./app"
 
 const port = process.env.PORT || 3000;
 
-const DB: string | undefined = process.env.MONGODB_URI;
+const DB: string | undefined = process.env.MONGODB_URI!;
+
 const connectDb = async (): Promise<void> => {
 
     if (!DB) {
@@ -25,7 +26,9 @@ const connectDb = async (): Promise<void> => {
     }
 
 };
-connectDb();
+if (!DB) {
+    connectDb();
+}
 
 
 app.listen(port, () => {
