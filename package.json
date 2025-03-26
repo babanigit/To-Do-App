@@ -12,7 +12,6 @@
     "build": "npm install --prefix ./app && npm run build --prefix ./app && npm install",
     "start": "node -r dotenv/config api/dist/index.js",
     "i": "npm install --prefix ./app && npm run build --prefix ./app && npm install && npm install ./api",
-    "build2": " npm run build --prefix ./app",
     "start2": "nodemon api/dist/index.js",
     "DockerStart" : "npm run DockerStart --prefix ./api"
   },
