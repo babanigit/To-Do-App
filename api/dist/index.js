@@ -21,7 +21,9 @@ const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
         throw new Error("Database connection string is not provided. -b");
     }
     try {
-        const connect = yield mongoose_1.default.connect(DB);
+        const connect = yield mongoose_1.default.connect(DB, {
+            serverSelectionTimeoutMS: 30000 // Increase timeout to 30 seconds
+        });
         console.log("💚[database connected]:", connect.connection.host, connect.connection.name);
     }
     catch (error) {

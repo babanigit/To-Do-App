@@ -13,7 +13,9 @@ const connectDb = async (): Promise<void> => {
     }
 
     try {
-        const connect = await mongoose.connect(DB);
+        const connect = await mongoose.connect(DB, {
+            serverSelectionTimeoutMS: 30000 // Increase timeout to 30 seconds
+          });
         console.log(
             "💚[database connected]:",
             connect.connection.host,
