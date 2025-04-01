@@ -22,7 +22,8 @@ const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     try {
         const connect = yield mongoose_1.default.connect(DB, {
-            serverSelectionTimeoutMS: 30000 // Increase timeout to 30 seconds
+        // serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+        // connectTimeoutMS: 30000
         });
         console.log("💚[database connected]:", connect.connection.host, connect.connection.name);
     }
@@ -31,9 +32,7 @@ const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
         console.error(error);
     }
 });
-if (!DB) {
-    connectDb();
-}
+connectDb();
 app_1.default.listen(port, () => {
     console.log(`💚[server]: Server is running at http://localhost:${port}`);
 });
