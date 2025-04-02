@@ -36,31 +36,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// app.ts
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const http_errors_1 = __importStar(require("http-errors"));
-// import session from "express-session";
-// import MongoStore from "connect-mongo";
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
-// import { graphqlHTTP } from "express-graphql";
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: "../.env" });
+// dotenv.config({ path: "../.env" });
+dotenv_1.default.config(); // No need to specify a path in Docker
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const listRoutes_1 = __importDefault(require("./routes/listRoutes"));
 const verifyJwtCookie_1 = require("./middlewares/verifyJwtCookie");
-// import schema from "./schema/Schema"
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)());
 app.enable("trust proxy");
-// app.use("/graphql",graphqlHTTP({
-//     schema,
-//     graphiql:process.env.NODE_ENV === "development"
-// }))
 const bool = process.env.NODE_ENV || "production";
 let pathToIndex = path_1.default.resolve();
 if (bool !== "production") {
@@ -75,13 +69,11 @@ console.log("newPath ", newPath);
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/todos", verifyJwtCookie_1.verifyToken, listRoutes_1.default);
 // use the frontend static files
-// if (bool === "production" && pathToIndex!) {
 console.log("Using the Frontend static files");
 app.use(express_1.default.static(path_1.default.join(pathToIndex, "/app/dist")));
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(pathToIndex, "/app/dist/index.html"));
 });
-// }
 // get
 app.get("/", (req, res) => {
     res.send("Express + TypeScript Server");

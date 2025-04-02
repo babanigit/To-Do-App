@@ -1,9 +1,10 @@
+// index.ts
 import mongoose from "mongoose";
 import app from "./app";
 
 const port = process.env.PORT || 3000;
 
-const DB: string | undefined = process.env.MONGODB_URI!;
+const DB: string = process.env.MONGODB_URI || "mongodb://mongo:27017/todoDB";
 
 const connectDb = async (): Promise<void> => {
     if (!DB) {

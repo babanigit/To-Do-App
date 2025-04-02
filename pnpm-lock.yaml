@@ -14,6 +14,9 @@ importers:
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
+      concurrently:
+        specifier: ^8.2.2
+        version: 8.2.2
       connect-mongo:
         specifier: ^5.1.0
         version: 5.1.0(express-session@1.18.1)(mongodb@6.13.0)
@@ -47,12 +50,9 @@ importers:
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
-      pre-commit:
-        specifier: ^1.2.2
-        version: 1.2.2
-      typescript:
-        specifier: ^5.4.4
-        version: 5.7.3
+      pnpm:
+        specifier: ^10.7.1
+        version: 10.7.1
     devDependencies:
       '@types/bcrypt':
         specifier: ^5.0.2
@@ -84,9 +84,18 @@ importers:
       nodemon:
         specifier: ^3.1.0
         version: 3.1.9
+      pre-commit:
+        specifier: ^1.2.2
+        version: 1.2.2
+      rimraf:
+        specifier: ^5.0.5
+        version: 5.0.10
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.10.15(@swc/helpers@0.5.15))(@types/node@20.17.17)(typescript@5.7.3)
+      typescript:
+        specifier: ^5.4.4
+        version: 5.7.3
 
   api:
     dependencies:
@@ -1858,6 +1867,11 @@ packages:
   pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  pnpm@10.7.1:
+    resolution: {integrity: sha512-LZLIa3ko3IKE9TSU+0IB+YPaZfD7Tw1Auq+lz2KPox2uPllo8SRm8X336XMQ4w80OmSLrqG5s1BoXa+v/99YCA==}
+    engines: {node: '>=18.12'}
+    hasBin: true
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -4143,6 +4157,8 @@ snapshots:
 
   pirates@4.0.6: {}
 
+  pnpm@10.7.1: {}
+
   postcss-import@15.1.0(postcss@8.5.2):
     dependencies:
       postcss: 8.5.2
@@ -4634,6 +4650,7 @@ snapshots:
     dependencies:
       api: file:api
       bcrypt: 5.1.1
+      concurrently: 8.2.2
       connect-mongo: 5.1.0(express-session@1.18.1)(mongodb@6.13.0)
       cookie-parser: 1.4.7
       cors: 2.8.5
@@ -4645,8 +4662,7 @@ snapshots:
       jsonwebtoken: 9.0.2
       mongoose: 8.10.0
       morgan: 1.10.0
-      pre-commit: 1.2.2
-      typescript: 5.7.3
+      pnpm: 10.7.1
     transitivePeerDependencies:
       - '@aws-sdk/credential-providers'
       - '@mongodb-js/zstd'

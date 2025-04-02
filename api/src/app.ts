@@ -1,21 +1,20 @@
+// app.ts
 import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 
 import createHttpError, { isHttpError } from "http-errors";
-// import session from "express-session";
-// import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import path from "path";
 
-// import { graphqlHTTP } from "express-graphql";
 import dotenv from "dotenv";
-dotenv.config({ path: "../.env" });
+// dotenv.config({ path: "../.env" });
+dotenv.config();  // No need to specify a path in Docker
+
 
 import userRouter from "./routes/userRoutes";
 import listRouter from "./routes/listRoutes";
 import { verifyToken } from "./middlewares/verifyJwtCookie";
-// import schema from "./schema/Schema"
 
 const app: Express = express();
 
@@ -25,10 +24,6 @@ app.use(cookieParser());
 app.use(cors());
 app.enable("trust proxy");
 
-// app.use("/graphql",graphqlHTTP({
-//     schema,
-//     graphiql:process.env.NODE_ENV === "development"
-// }))
 const bool: string | undefined = process.env.NODE_ENV || "production";
 
 let pathToIndex = path.resolve();
@@ -49,14 +44,11 @@ app.use("/api/users", userRouter);
 app.use("/api/todos", verifyToken, listRouter);
 
 // use the frontend static files
-
-// if (bool === "production" && pathToIndex!) {
 console.log("Using the Frontend static files");
 app.use(express.static(path.join(pathToIndex, "/app/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(pathToIndex, "/app/dist/index.html"));
 });
-// }
 
 // get
 app.get("/", (req: Request, res: Response) => {

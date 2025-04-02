@@ -1,17 +1,31 @@
-node_modules
-npm-debug.log
-Dockerfile
-.dockerignore
-.env
 
-# the import folder is dist
+# api
 api/node_modules
 api/src
-api/package.json
 api/package-lock.json
-app
+api/package.json
+api/tsconfig.json
 
-# api/npm-debug.log
-# api/Dockerfile
-# api/.dockerignore
-# api/.env
+# app
+app/node_modules
+app/src
+app/package.json
+app/package-lock.json
+app/.gitignore
+app/index.html
+app/README.md
+app/tsconfig.json
+app/tsconfig.node.json
+app/vite.config.ts
+
+# ./
+node_modules
+ss
+.gitignore
+.dockerignore
+.hintrc
+docker-compose.yml
+Dockerfile
+pnpm-lock.yaml
+pnpm-workspace.yaml
+README.md
