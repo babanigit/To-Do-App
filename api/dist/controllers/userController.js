@@ -61,7 +61,12 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         }, process.env.SECRET);
         const expiryDate = new Date(Date.now() + 3600000); // 1 hour
         res
-            .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+            .cookie("access_token", token, {
+            httpOnly: true,
+            expires: expiryDate,
+            secure: true, // ✅ Needed for HTTPS (like Railway/Vercel)
+            sameSite: "none", // ✅ Allows cross-origin cookies (Vercel <-> Railway)
+        })
             .status(200)
             .json(user);
     }
@@ -93,7 +98,12 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         const expiryDate = new Date(Date.now() + 3600000); // 1 hour
         // const expiryDate = new Date(Date.now() + 30000); // 30 seconds
         res
-            .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+            .cookie("access_token", token, {
+            httpOnly: true,
+            expires: expiryDate,
+            secure: true, // ✅ Needed for HTTPS (like Railway/Vercel)
+            sameSite: "none", // ✅ Allows cross-origin cookies (Vercel <-> Railway)
+        })
             .status(200)
             .json(user);
     }

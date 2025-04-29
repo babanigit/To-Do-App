@@ -53,18 +53,23 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)());
+const FRONTEND_APP = process.env.FRONTEND_APP;
+// app.use(cors());
+// ✅ CORS setup to allow frontend from Vercel to access backend
+app.use((0, cors_1.default)({
+    origin: FRONTEND_APP, // 🔁 Replace with your actual Vercel URL
+    credentials: true,
+}));
 app.enable("trust proxy");
-const bool = process.env.NODE_ENV || "production";
-let pathToIndex = path_1.default.resolve();
-if (bool !== "production") {
-    pathToIndex = path_1.default.dirname(path_1.default.resolve());
-    console.log("dirname2 ", pathToIndex);
+let pathToIndex = path_1.default.dirname(path_1.default.resolve());
+if (process.env.ENV_FOR_DOCKER == "true") {
+    pathToIndex = path_1.default.resolve();
+    console.log(" For_Docker_Container / production ");
 }
-const parentDirname = path_1.default.dirname(pathToIndex);
-console.log("parentDirname ", parentDirname);
-const newPath = path_1.default.join(parentDirname, path_1.default.basename(pathToIndex));
-console.log("newPath ", newPath);
+// const parentDirname = path.dirname(pathToIndex);
+// console.log("parentDirname ", parentDirname);
+// const newPath = path.join(parentDirname, path.basename(pathToIndex));
+// console.log("newPath ", newPath);
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/todos", verifyJwtCookie_1.verifyToken, listRoutes_1.default);

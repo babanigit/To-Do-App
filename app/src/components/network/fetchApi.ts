@@ -7,13 +7,26 @@ import {
   IUserModel,
 } from "../modal/userModal";
 
-// const todoLink = "api/todos/";
-const userLink = "api/users/";
-const todoLink = "api/todos/";
+// coupled and decoupled urls
+let userLink = "api/users/";
+let todoLink = "api/todos/";
+
+const apiUrlUsers: string =
+  import.meta.env.VITE_BACKEND_API_URL + "/api/users/";
+const apiUrlTodo: string = import.meta.env.VITE_BACKEND_API_URL + "/api/todos/";
+
+const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
+if (decoupled) {
+  userLink = apiUrlUsers;
+  todoLink = apiUrlTodo;
+}
 
 // fetcher.
 const fetchData = async (input: RequestInfo, init?: RequestInit) => {
-  const res = await fetch(input, init);
+  const res = await fetch(input, {
+    ...init,
+    credentials: "include", // ✅ This is required to send cookies!
+  });
 
   if (res.ok) return res;
   else {

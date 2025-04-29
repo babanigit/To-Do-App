@@ -11,24 +11,13 @@ services:
       - "3001:3000"
     env_file:
       - ./.env # Load environment variables
-    environment:
-      MONGO_URI: "mongodb://mongo:27017/todo"
+    # environment:
+    #   MONGO_URI: "mongodb://mongo:27017/todo"
     volumes:
       - .:/app
       - /app/node_modules
-
     depends_on:
       - mongo
-      # - frontend
-
-  # frontend:
-  #   build: ./app
-  #   container_name: todo-frontend-bab
-  #   ports:
-  #     - "3000:80"
-  #   volumes:
-  #     - ./app:/app
-  #     - /app/node_modules
 
   mongo:
     image: mongo:latest

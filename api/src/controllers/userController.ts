@@ -86,7 +86,12 @@ export const getRegister = async (
 
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expiryDate,
+        secure: true, // ✅ Needed for HTTPS (like Railway/Vercel)
+        sameSite: "none", // ✅ Allows cross-origin cookies (Vercel <-> Railway)
+      })
       .status(200)
       .json(user);
   } catch (error) {
@@ -115,7 +120,7 @@ export const getLogin = async (
       throw new Error("Password or user password is not a string");
 
     const passwdMatch = await bcrypt.compare(password, user.password);
-    
+
     if (!passwdMatch) throw createHttpError(401, "invalid credentials");
 
     // generating token
@@ -130,7 +135,12 @@ export const getLogin = async (
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
     // const expiryDate = new Date(Date.now() + 30000); // 30 seconds
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expiryDate,
+        secure: true, // ✅ Needed for HTTPS (like Railway/Vercel)
+        sameSite: "none", // ✅ Allows cross-origin cookies (Vercel <-> Railway)
+      })
       .status(200)
       .json(user);
   } catch (error) {

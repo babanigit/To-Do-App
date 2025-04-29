@@ -12,7 +12,7 @@ import { ThemeDataType } from "../../assets/theme";
 
 interface RegisterModelProps {
   // onDismiss: () => void;
-  onRegistrationSuccessful: (value:void) => void;
+  onRegistrationSuccessful: (value: void) => void;
   theme: ThemeDataType;
 }
 
@@ -22,6 +22,14 @@ const RegisterModel = ({
   theme,
 }: RegisterModelProps) => {
   const [formData, setFormData] = useState({});
+
+  const apiUrl: string =
+    import.meta.env.VITE_BACKEND_API_URL + "/api/users/register";
+  const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
+  let url: string = "/api/users/register";
+  if (decoupled) {
+    url = apiUrl;
+  }
 
   //redux
   const { loading, error, currentUser } = useAppSelector(
@@ -40,8 +48,9 @@ const RegisterModel = ({
 
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/users/register", {
+      const res = await fetch(url, {
         method: "POST",
+        credentials: "include",  // ✅ Crucial
         headers: {
           "Content-Type": "application/json",
         },

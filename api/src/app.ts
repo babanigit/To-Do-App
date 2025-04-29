@@ -9,8 +9,7 @@ import path from "path";
 
 import dotenv from "dotenv";
 // dotenv.config({ path: "../.env" });
-dotenv.config();  // No need to specify a path in Docker
-
+dotenv.config(); // No need to specify a path in Docker
 
 import userRouter from "./routes/userRoutes";
 import listRouter from "./routes/listRoutes";
@@ -21,23 +20,31 @@ const app: Express = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(cors());
+
+const FRONTEND_APP = process.env.FRONTEND_APP;
+
+// app.use(cors());
+// ✅ CORS setup to allow frontend from Vercel to access backend
+app.use(
+  cors({
+    origin: FRONTEND_APP, // 🔁 Replace with your actual Vercel URL
+    credentials: true,
+  })
+);
+
 app.enable("trust proxy");
 
-const bool: string | undefined = process.env.NODE_ENV || "production";
+let pathToIndex = path.dirname(path.resolve());
 
-let pathToIndex = path.resolve();
-
-if (bool !== "production") {
-   pathToIndex = path.dirname(path.resolve());
-  console.log("dirname2 ", pathToIndex);
+if (process.env.ENV_FOR_DOCKER == "true") {
+  pathToIndex = path.resolve();
+  console.log(" For_Docker_Container / production ");
 }
 
-const parentDirname = path.dirname(pathToIndex);
-console.log("parentDirname ", parentDirname);
-
-const newPath = path.join(parentDirname, path.basename(pathToIndex));
-console.log("newPath ", newPath);
+// const parentDirname = path.dirname(pathToIndex);
+// console.log("parentDirname ", parentDirname);
+// const newPath = path.join(parentDirname, path.basename(pathToIndex));
+// console.log("newPath ", newPath);
 
 // routes
 app.use("/api/users", userRouter);

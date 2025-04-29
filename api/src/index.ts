@@ -4,7 +4,11 @@ import app from "./app";
 
 const port = process.env.PORT || 3000;
 
-const DB: string = process.env.MONGODB_URI || "mongodb://mongo:27017/todoDB";
+const DB: string | undefined =
+    process.env.ENV_FOR_DOCKER === "true"
+        ? process.env.MONGODB_URI_DOCKER
+        : process.env.MONGODB_URI 
+        // || process.env.MONGODB_URI_DOCKER;
 
 const connectDb = async (): Promise<void> => {
     if (!DB) {

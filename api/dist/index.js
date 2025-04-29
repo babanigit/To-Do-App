@@ -16,7 +16,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const port = process.env.PORT || 3000;
-const DB = process.env.MONGODB_URI || "mongodb://mongo:27017/todoDB";
+const DB = process.env.ENV_FOR_DOCKER === "true"
+    ? process.env.MONGODB_URI_DOCKER
+    : process.env.MONGODB_URI;
+// || process.env.MONGODB_URI_DOCKER;
 const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!DB) {
         throw new Error("Database connection string is not provided. -b");

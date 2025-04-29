@@ -20,6 +20,14 @@ interface LoginModelProps {
 const LoginModel = ({ onLoginSuccessful, theme }: LoginModelProps) => {
   const [formData, setFormData] = useState({});
 
+  const apiUrl: string =
+    import.meta.env.VITE_BACKEND_API_URL + "/api/users/login";
+  const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
+  let url: string = "/api/users/login";
+  if (decoupled) {
+    url = apiUrl;
+  }
+
   //redux
   const { loading, error, currentUser } = useAppSelector(
     (state) => state.userDataInfo
@@ -37,8 +45,9 @@ const LoginModel = ({ onLoginSuccessful, theme }: LoginModelProps) => {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/users/login", {
+      const res = await fetch(url, {
         method: "POST",
+        credentials: "include",  // ✅ Crucial
         headers: {
           "Content-Type": "application/json",
         },
