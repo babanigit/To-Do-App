@@ -14,9 +14,8 @@ let todoLink = "api/todos/";
 const apiUrlUsers: string =
   import.meta.env.VITE_BACKEND_API_URL + "/api/users/";
 const apiUrlTodo: string = import.meta.env.VITE_BACKEND_API_URL + "/api/todos/";
-
-const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
-if (decoupled) {
+const decoupled: string = import.meta.env.VITE_DECOUPLED;
+if (decoupled == "true") {
   userLink = apiUrlUsers;
   todoLink = apiUrlTodo;
 }

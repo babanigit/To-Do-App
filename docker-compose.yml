@@ -11,8 +11,9 @@ services:
       - "3001:3000"
     env_file:
       - ./.env # Load environment variables
-    # environment:
-    #   MONGO_URI: "mongodb://mongo:27017/todo"
+    environment:
+      MONGODB_URI_DOCKER: "mongodb://mongo:27017/todo"
+      ENV_FOR_DOCKER: "true"
     volumes:
       - .:/app
       - /app/node_modules

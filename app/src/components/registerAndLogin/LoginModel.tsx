@@ -22,9 +22,9 @@ const LoginModel = ({ onLoginSuccessful, theme }: LoginModelProps) => {
 
   const apiUrl: string =
     import.meta.env.VITE_BACKEND_API_URL + "/api/users/login";
-  const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
+  const decoupled: string = import.meta.env.VITE_DECOUPLED;
   let url: string = "/api/users/login";
-  if (decoupled) {
+  if (decoupled == "true") {
     url = apiUrl;
   }
 

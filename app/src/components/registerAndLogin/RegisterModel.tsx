@@ -25,9 +25,9 @@ const RegisterModel = ({
 
   const apiUrl: string =
     import.meta.env.VITE_BACKEND_API_URL + "/api/users/register";
-  const decoupled: boolean = import.meta.env.VITE_DECOUPLED;
+  const decoupled: string = import.meta.env.VITE_DECOUPLED;
   let url: string = "/api/users/register";
-  if (decoupled) {
+  if (decoupled == "true") {
     url = apiUrl;
   }
 
@@ -50,7 +50,7 @@ const RegisterModel = ({
       dispatch(signInStart());
       const res = await fetch(url, {
         method: "POST",
-        credentials: "include",  // ✅ Crucial
+        credentials: "include", // ✅ Crucial
         headers: {
           "Content-Type": "application/json",
         },
